@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_weekly_planner">
+
+    <fragment
+        android:id="@+id/nav_weekly_planner"
+        android:name="com.zacbrannelly.shoppingbuddy.ui.weeklyplanner.WeeklyPlannerFragment"
+        android:label="@string/menu_weekly_planner"
+        tools:layout="@layout/fragment_weekly_planner" />
+
+    <fragment
+        android:id="@+id/nav_recipe_library"
+        android:name="com.zacbrannelly.shoppingbuddy.ui.recipelibrary.RecipeLibraryFragment"
+        android:label="@string/menu_recipe_library"
+        tools:layout="@layout/fragment_recipe_library" />
+
+    <fragment
+        android:id="@+id/nav_shopping_list"
+        android:name="com.zacbrannelly.shoppingbuddy.ui.shoppinglist.ShoppingListFragment"
+        android:label="@string/menu_shopping_list"
+        tools:layout="@layout/fragment_shopping_list" />
+</navigation>

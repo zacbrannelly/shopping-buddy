@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_weekly_planner"
+            android:icon="@drawable/ic_calendar_today"
+            android:title="@string/menu_weekly_planner" />
+        <item
+            android:id="@+id/nav_recipe_library"
+            android:icon="@drawable/ic_bookmark_border"
+            android:title="@string/menu_recipe_library" />
+        <item
+            android:id="@+id/nav_shopping_list"
+            android:icon="@drawable/ic_shopping_icon"
+            android:title="@string/menu_shopping_list" />
+    </group>
+</menu>
