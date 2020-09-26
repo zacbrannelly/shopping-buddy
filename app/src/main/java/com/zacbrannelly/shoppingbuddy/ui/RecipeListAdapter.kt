@@ -1,5 +1,6 @@
 package com.zacbrannelly.shoppingbuddy.ui
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.CornerFamily
 import com.zacbrannelly.shoppingbuddy.R
+import com.zacbrannelly.shoppingbuddy.entity.Recipe
 
-class RecipeListAdapter: RecyclerView.Adapter<RecipeListAdapter.ViewHolder>() {
+private const val TAG = "RecipeListAdapter"
+
+class RecipeListAdapter(private val listener: (Recipe, ImageView) -> Unit): RecyclerView.Adapter<RecipeListAdapter.ViewHolder>() {
 
     private var items = emptyList<RecipeListItem>()
 
@@ -45,6 +49,9 @@ class RecipeListAdapter: RecyclerView.Adapter<RecipeListAdapter.ViewHolder>() {
         override fun populate(item: RecipeListItem) {
             dragHandle.visibility =
                 if (item.isDraggable) ImageView.VISIBLE else ImageView.INVISIBLE
+
+            if (item.viewType == RecipeListItem.VIEW_TYPE_ITEM)
+                view.setOnClickListener { listener(item.recipe!!, image) }
         }
     }
 
