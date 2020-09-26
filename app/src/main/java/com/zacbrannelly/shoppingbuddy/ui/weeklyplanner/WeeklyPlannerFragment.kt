@@ -29,7 +29,6 @@ import com.zacbrannelly.shoppingbuddy.ui.detail.RecipeDetailActivity
 import java.util.*
 
 private const val TAG = "WeeklyPlannerFragment"
-private const val DETAIL_REQUEST_CODE = 1
 
 class WeeklyPlannerFragment : Fragment() {
 
@@ -68,15 +67,15 @@ class WeeklyPlannerFragment : Fragment() {
             lastSharedImageView = image
             image.transitionName = "imageView"
 
-            startActivityForResult(
+            // Start the detail activity.
+            startActivity(
                 Intent(context, RecipeDetailActivity::class.java),
-                DETAIL_REQUEST_CODE,
                 options.toBundle()
             )
         }
 
         viewModel.recipes.observe(viewLifecycleOwner) { recipeList ->
-            viewAdapter.setItems(recipeList.map { item -> RecipeListItem(item) })
+            viewAdapter.setItems(recipeList.map { item -> RecipeListItem(item, true) })
         }
 
         recipeList.isNestedScrollingEnabled = false
