@@ -40,7 +40,10 @@ class RecipeLibraryFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(RecipeLibraryViewModel::class.java)
 
-        val viewAdapter = RecipeListAdapter()
+        val viewAdapter = RecipeListAdapter { item, image ->
+
+        }
+
         val mockItems = listOf(
             RecipeListItem(Recipe(UUID.randomUUID())),
             RecipeListItem(Recipe(UUID.randomUUID())),
