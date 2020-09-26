@@ -6,12 +6,27 @@ import android.view.MenuItem
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.NavUtils
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.zacbrannelly.shoppingbuddy.R
+import com.zacbrannelly.shoppingbuddy.ui.ExpandableListAdapter
+import com.zacbrannelly.shoppingbuddy.ui.ExpandableListItem
 
 class RecipeDetailActivity : AppCompatActivity() {
+    private lateinit var expandableList: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe_detail)
+
+        expandableList = findViewById(R.id.expandable_list)
+        expandableList.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = ExpandableListAdapter(context, listOf(
+                ExpandableListItem(R.drawable.ic_format_list_bulleted, "Ingredients"),
+                ExpandableListItem(R.drawable.ic_outdoor_grill, "Steps")
+            ))
+        }
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)

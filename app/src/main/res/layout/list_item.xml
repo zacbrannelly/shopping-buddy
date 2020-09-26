@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:id="@+id/list_item_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:text="Tasty Cheese"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        style="@style/TextAppearance.MaterialComponents.Body2"
+        android:id="@+id/list_item_caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:textColor="@android:color/secondary_text_dark_nodisable"
+        android:text="2 Slices"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/list_item_heading"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="10dp"
+        android:layout_marginRight="30dp"
+        android:background="@android:color/secondary_text_dark_nodisable"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/list_item_caption"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
