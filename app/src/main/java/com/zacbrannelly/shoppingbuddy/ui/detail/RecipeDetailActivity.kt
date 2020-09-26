@@ -17,6 +17,7 @@ class RecipeDetailActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         // Show back button in app bar
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_clear)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
