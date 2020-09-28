@@ -95,7 +95,7 @@ class ExpandableListAdapter(private val context: Context, private val items: Lis
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_expandable_item, parent, false)
 
-        val list = view.findViewById<RecyclerView>(R.id.item_list).apply {
+        view.findViewById<RecyclerView>(R.id.item_list).apply {
             setHasFixedSize(true)
             isNestedScrollingEnabled = false
             layoutManager = LinearLayoutManager(parent.context)
