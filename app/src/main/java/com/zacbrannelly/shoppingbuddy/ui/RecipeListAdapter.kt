@@ -19,7 +19,7 @@ import java.util.*
 private const val TAG = "RecipeListAdapter"
 
 class RecipeListAdapter(private val itemClickListener: (Recipe, ImageView) -> Unit,
-                        private val itemOrderChangedListener: ((Int, Int, List<RecipeListItem>) -> Unit)? = null): RecyclerView.Adapter<RecipeListAdapter.ViewHolder>() {
+                        private val itemOrderChangedListener: (() -> Unit)? = null): RecyclerView.Adapter<RecipeListAdapter.ViewHolder>() {
 
     private var touchHelper: ItemTouchHelper? = null
     private var touchHelperListener = ItemMoveListener()
@@ -101,6 +101,11 @@ class RecipeListAdapter(private val itemClickListener: (Recipe, ImageView) -> Un
     }
 
     fun onMoveItem(fromPosition: Int, toPosition: Int) {
+        // Don't allow an item move to above the first header.
+        if (toPosition == 0 && items[fromPosition].viewType == RecipeListItem.VIEW_TYPE_ITEM)
+            return
+
+        // Reorder the list of items
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
                 Collections.swap(items, i, i + 1)
@@ -113,7 +118,7 @@ class RecipeListAdapter(private val itemClickListener: (Recipe, ImageView) -> Un
         notifyItemMoved(fromPosition, toPosition)
         Log.i(TAG, "Item reordering occurred from $fromPosition to $toPosition")
 
-        itemOrderChangedListener?.invoke(fromPosition, toPosition, items)
+        itemOrderChangedListener?.invoke()
     }
 
     fun setItems(data: List<RecipeListItem>) {
