@@ -49,6 +49,7 @@ class RecipeListAdapter(private val itemClickListener: (Recipe, ImageView) -> Un
             // STUB
         }
 
+        override fun isLongPressDragEnabled() = false
     }
 
     abstract inner class ViewHolder(protected val view: View): RecyclerView.ViewHolder(view) {
