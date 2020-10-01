@@ -19,6 +19,7 @@ import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zacbrannelly.shoppingbuddy.R
@@ -56,7 +57,7 @@ class WeeklyPlannerFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(WeeklyPlannerViewModel::class.java)
 
-        val viewAdapter = RecipeListAdapter { item, image ->
+        val viewAdapter = RecipeListAdapter ({ item, image ->
             // Setup shared element transition.
             val options = ActivityOptions.makeSceneTransitionAnimation(requireActivity(), Pair(image, "imageView"))
 
@@ -72,7 +73,7 @@ class WeeklyPlannerFragment : Fragment() {
                 Intent(context, RecipeDetailActivity::class.java),
                 options.toBundle()
             )
-        }
+        })
 
         viewModel.recipes.observe(viewLifecycleOwner) { recipeList ->
             viewAdapter.setItems(recipeList.map { item -> RecipeListItem(item, true) })

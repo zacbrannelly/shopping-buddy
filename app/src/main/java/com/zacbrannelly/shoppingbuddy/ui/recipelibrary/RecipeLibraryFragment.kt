@@ -16,7 +16,6 @@ import java.util.*
 
 class RecipeLibraryFragment : Fragment() {
 
-
     companion object {
         fun newInstance() = RecipeLibraryFragment()
     }
@@ -40,9 +39,9 @@ class RecipeLibraryFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(RecipeLibraryViewModel::class.java)
 
-        val viewAdapter = RecipeListAdapter { item, image ->
+        val viewAdapter = RecipeListAdapter ({ _, _ ->
 
-        }
+        })
 
         val mockItems = listOf(
             RecipeListItem(Recipe(UUID.randomUUID())),
