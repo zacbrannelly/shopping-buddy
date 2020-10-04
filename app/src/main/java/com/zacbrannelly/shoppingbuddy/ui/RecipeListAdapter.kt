@@ -1,6 +1,9 @@
 package com.zacbrannelly.shoppingbuddy.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.*
+import android.graphics.drawable.ColorDrawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -8,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
@@ -18,21 +22,39 @@ import java.util.*
 
 private const val TAG = "RecipeListAdapter"
 
-class RecipeListAdapter(private val itemClickListener: (Recipe, ImageView) -> Unit,
+class RecipeListAdapter(val context: Context,
+                        private val itemClickListener: (Recipe, ImageView) -> Unit,
                         private val itemOrderChangedListener: (() -> Unit)? = null): RecyclerView.Adapter<RecipeListAdapter.ViewHolder>() {
 
     private var touchHelper: ItemTouchHelper? = null
-    private var touchHelperListener = ItemMoveListener()
+    private var touchHelperListener = ItemMoveListener(context)
     private var items = emptyList<RecipeListItem>()
 
     // ItemTouchHelper listener that allows dragging items.
-    inner class ItemMoveListener : ItemTouchHelper.Callback() {
+    inner class ItemMoveListener(private val context: Context) : ItemTouchHelper.Callback() {
+        private val background: ColorDrawable = ColorDrawable()
+        private val deleteIcon = ContextCompat.getDrawable(context, R.drawable.ic_delete)
+
         override fun getMovementFlags(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder
         ): Int {
-            // Allow up and down movements only.
-            return makeMovementFlags(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0)
+            // Don't allow movement on headings.
+            if (viewHolder is HeadingViewHolder) {
+                return 0
+            }
+
+            // Allow up or down movement (reordering) and swiping to the left (to delete).
+            var moveFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN
+            val swipeFlags = ItemTouchHelper.START
+
+            // Disable dragging on no-draggable list items.
+            val recipeViewHolder = viewHolder as RecipeViewHolder
+            if (!recipeViewHolder.item!!.isDraggable) {
+                moveFlags = 0
+            }
+
+            return makeMovementFlags(moveFlags, swipeFlags)
         }
 
         override fun onMove(
@@ -42,14 +64,50 @@ class RecipeListAdapter(private val itemClickListener: (Recipe, ImageView) -> Un
         ): Boolean {
             // Notify the adapter of the change.
             onMoveItem(viewHolder.adapterPosition, target.adapterPosition)
-            return true
+            return false
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-            // STUB
+            // Notify the adapter of the removal.
+            onRemoveItem(viewHolder.adapterPosition)
         }
 
-        override fun isLongPressDragEnabled() = false
+        override fun onChildDraw(
+            c: Canvas,
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            dX: Float,
+            dY: Float,
+            actionState: Int,
+            isCurrentlyActive: Boolean
+        ) {
+            val itemView = viewHolder.itemView
+
+            background.bounds = Rect(
+                itemView.right + dX.toInt(),
+                itemView.top,
+                itemView.right,
+                itemView.bottom
+            )
+            background.color = Color.RED
+            background.draw(c)
+
+            // Calculate position of delete icon
+            val itemHeight = itemView.bottom - itemView.top
+            val intrinsicWidth = (deleteIcon!!.intrinsicWidth * 1.5).toInt()
+            val intrinsicHeight = (deleteIcon!!.intrinsicHeight * 1.5).toInt()
+            val deleteIconTop = itemView.top + (itemHeight - intrinsicHeight) / 2
+            val deleteIconMargin = (itemHeight - intrinsicHeight) / 2
+            val deleteIconLeft = itemView.right - deleteIconMargin - intrinsicWidth
+            val deleteIconRight = itemView.right - deleteIconMargin
+            val deleteIconBottom = deleteIconTop + intrinsicHeight
+
+            // Draw the delete icon
+            deleteIcon.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom)
+            deleteIcon.draw(c)
+
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+        }
     }
 
     abstract inner class ViewHolder(protected val view: View): RecyclerView.ViewHolder(view) {
@@ -65,6 +123,8 @@ class RecipeListAdapter(private val itemClickListener: (Recipe, ImageView) -> Un
     }
 
     inner class RecipeViewHolder(view: View) : ViewHolder(view) {
+        var item: RecipeListItem? = null
+
         private val image = view.findViewById<ShapeableImageView>(R.id.list_item_image)
         private val heading = view.findViewById<TextView>(R.id.list_item_heading)
         private val subHeading = view.findViewById<TextView>(R.id.list_item_sub_heading)
@@ -82,6 +142,8 @@ class RecipeListAdapter(private val itemClickListener: (Recipe, ImageView) -> Un
 
         @SuppressLint("ClickableViewAccessibility")
         override fun populate(item: RecipeListItem) {
+            this.item = item
+
             if (item.viewType == RecipeListItem.VIEW_TYPE_ITEM)
                 view.setOnClickListener { itemClickListener(item.recipe!!, image) }
 
@@ -102,24 +164,29 @@ class RecipeListAdapter(private val itemClickListener: (Recipe, ImageView) -> Un
     }
 
     fun onMoveItem(fromPosition: Int, toPosition: Int) {
+        Log.i(TAG, "Item reordering occurred from $fromPosition to $toPosition")
+
         // Don't allow an item move to above the first header.
         if (toPosition == 0 && items[fromPosition].viewType == RecipeListItem.VIEW_TYPE_ITEM)
             return
 
-        // Reorder the list of items
-        if (fromPosition < toPosition) {
-            for (i in fromPosition until toPosition) {
-                Collections.swap(items, i, i + 1)
-            }
-        } else {
-            for (i in fromPosition downTo toPosition + 1) {
-                Collections.swap(items, i, i - 1)
-            }
-        }
+        // Swap the data
+        Collections.swap(items, fromPosition, toPosition)
+
+        // Notify the system so the animation occurs.
         notifyItemMoved(fromPosition, toPosition)
-        Log.i(TAG, "Item reordering occurred from $fromPosition to $toPosition")
 
         itemOrderChangedListener?.invoke()
+    }
+
+    fun onRemoveItem(position: Int) {
+        // Remove from the list
+        val newList = items.toMutableList()
+        newList.removeAt(position)
+
+        // Update the list
+        items = newList
+        notifyItemRemoved(position)
     }
 
     fun setItems(data: List<RecipeListItem>) {

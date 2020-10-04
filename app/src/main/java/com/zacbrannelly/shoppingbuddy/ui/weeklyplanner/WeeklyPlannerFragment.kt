@@ -57,7 +57,8 @@ class WeeklyPlannerFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(WeeklyPlannerViewModel::class.java)
 
-        val viewAdapter = RecipeListAdapter (
+        val viewAdapter = RecipeListAdapter(
+            requireContext(),
             { item, image ->
                 // Setup shared element transition.
                 val options = ActivityOptions.makeSceneTransitionAnimation(requireActivity(), Pair(image, "imageView"))

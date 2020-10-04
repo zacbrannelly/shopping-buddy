@@ -39,7 +39,7 @@ class RecipeLibraryFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(RecipeLibraryViewModel::class.java)
 
-        val viewAdapter = RecipeListAdapter ({ _, _ ->
+        val viewAdapter = RecipeListAdapter (requireContext(), { _, _ ->
 
         })
 
