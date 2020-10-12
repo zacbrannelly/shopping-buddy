@@ -1,0 +1,18 @@
+{
+  "recipes": [
+    {
+      "id": "c9dc8d98-dee6-4239-a839-44a1c40ea055",
+      "name": "Ham & Cheese",
+      "type": "Sandwich",
+      "image": "ham_cheese_toast.jpg",
+      "isImageAsset": true
+    },
+    {
+      "id": "59919df4-f0de-4748-b36f-a7902e51332f",
+      "name": "Butter Chicken",
+      "type": "Indian",
+      "image": "butter_chicken.jpg",
+      "isImageAsset": true
+    }
+  ]
+}

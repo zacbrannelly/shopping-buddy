@@ -1,10 +1,8 @@
 package com.zacbrannelly.shoppingbuddy.ui.weeklyplanner
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.zacbrannelly.shoppingbuddy.entity.Recipe
+import com.zacbrannelly.shoppingbuddy.data.Recipe
 import com.zacbrannelly.shoppingbuddy.ui.RecipeListItem
 import java.util.*
 import kotlin.collections.ArrayList
@@ -15,7 +13,7 @@ class WeeklyPlannerViewModel : ViewModel() {
     var recipes = MutableLiveData<List<RecipeListItem>>()
 
     var planner = mutableMapOf<String, List<Recipe>>(
-        "Monday"    to listOf(Recipe(UUID.randomUUID()), Recipe(UUID.randomUUID())),
+        "Monday"    to emptyList(),
         "Tuesday"   to emptyList(),
         "Wednesday" to emptyList(),
         "Thursday"  to emptyList(),

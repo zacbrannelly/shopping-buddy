@@ -18,6 +18,7 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.CornerFamily
 import com.zacbrannelly.shoppingbuddy.R
 import com.zacbrannelly.shoppingbuddy.data.Recipe
+import kotlinx.coroutines.*
 import java.util.*
 
 private const val TAG = "RecipeListAdapter"
@@ -140,9 +141,35 @@ class RecipeListAdapter(val context: Context,
                 .build()
         }
 
+        private fun loadImageFromAssets(path: String) = CoroutineScope(Dispatchers.Main).launch {
+            // Load the image in an IO thread.
+            val task = async(Dispatchers.IO) {
+                var loadedImage: Bitmap? = null
+
+                // Load the image from the assets folder
+                context.assets.open(path).use { inputStream ->
+                    loadedImage = BitmapFactory.decodeStream(inputStream)
+                    Log.i(TAG, "Successfully loaded image from path: $path")
+                }
+
+                return@async loadedImage
+            }
+
+            // Set the bitmap in the UI thread.
+            val bitmap = task.await()
+            image.setImageBitmap(bitmap)
+        }
+
         @SuppressLint("ClickableViewAccessibility")
         override fun populate(item: RecipeListItem) {
             this.item = item
+
+            heading.text = item.recipe?.name
+            subHeading.text = item.recipe?.type
+
+            if (item.recipe!!.isImageAsset) {
+                loadImageFromAssets(item.recipe!!.image)
+            }
 
             if (item.viewType == RecipeListItem.VIEW_TYPE_ITEM)
                 view.setOnClickListener { itemClickListener(item.recipe!!, image) }

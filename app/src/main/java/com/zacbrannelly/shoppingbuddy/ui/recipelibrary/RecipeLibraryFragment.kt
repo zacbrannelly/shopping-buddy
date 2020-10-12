@@ -6,10 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zacbrannelly.shoppingbuddy.R
-import com.zacbrannelly.shoppingbuddy.entity.Recipe
+import com.zacbrannelly.shoppingbuddy.data.Recipe
 import com.zacbrannelly.shoppingbuddy.ui.RecipeListAdapter
 import com.zacbrannelly.shoppingbuddy.ui.RecipeListItem
 import java.util.*
@@ -43,16 +44,14 @@ class RecipeLibraryFragment : Fragment() {
 
         })
 
-        val mockItems = listOf(
-            RecipeListItem(Recipe(UUID.randomUUID())),
-            RecipeListItem(Recipe(UUID.randomUUID())),
-            RecipeListItem(Recipe(UUID.randomUUID()))
-        )
-        viewAdapter.setItems(mockItems)
-
         recipeList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = viewAdapter
+        }
+
+        viewModel.recipes.observe(viewLifecycleOwner) { items ->
+            val listItems = items.map { recipe -> RecipeListItem(recipe, false) }
+            viewAdapter.setItems(listItems)
         }
     }
 

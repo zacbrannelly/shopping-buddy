@@ -1,6 +1,6 @@
 package com.zacbrannelly.shoppingbuddy.ui
 
-import com.zacbrannelly.shoppingbuddy.entity.Recipe
+import com.zacbrannelly.shoppingbuddy.data.Recipe
 
 class RecipeListItem {
     var recipe: Recipe? = null
