@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.CornerFamily
 import com.zacbrannelly.shoppingbuddy.R
-import com.zacbrannelly.shoppingbuddy.entity.Recipe
+import com.zacbrannelly.shoppingbuddy.data.Recipe
 import java.util.*
 
 private const val TAG = "RecipeListAdapter"
@@ -211,7 +211,7 @@ class RecipeListAdapter(val context: Context,
             RecipeListItem.VIEW_TYPE_HEADER -> holder = HeadingViewHolder(
                 inflater.inflate(R.layout.list_header_item, parent, false))
             RecipeListItem.VIEW_TYPE_ITEM   -> holder = RecipeViewHolder(
-                inflater.inflate(R.layout.list_recipe_item, parent, false))
+                inflater.inflate(R.layout.list_card_recipe_item, parent, false))
         }
 
         return holder!!

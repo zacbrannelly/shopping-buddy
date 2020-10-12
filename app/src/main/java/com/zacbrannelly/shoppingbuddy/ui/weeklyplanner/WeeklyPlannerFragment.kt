@@ -1,33 +1,23 @@
 package com.zacbrannelly.shoppingbuddy.ui.weeklyplanner
 
-import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.transition.TransitionInflater
 import android.util.Pair
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.os.bundleOf
-import androidx.core.view.doOnPreDraw
 import androidx.lifecycle.observe
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.zacbrannelly.shoppingbuddy.R
-import com.zacbrannelly.shoppingbuddy.entity.Recipe
 import com.zacbrannelly.shoppingbuddy.ui.RecipeListAdapter
-import com.zacbrannelly.shoppingbuddy.ui.RecipeListItem
 import com.zacbrannelly.shoppingbuddy.ui.detail.RecipeDetailActivity
-import java.util.*
 
 private const val TAG = "WeeklyPlannerFragment"
 
@@ -49,6 +39,11 @@ class WeeklyPlannerFragment : Fragment() {
             .inflate(R.layout.fragment_weekly_planner, container, false)
 
         recipeList = view.findViewById(R.id.recipe_list)
+
+        view.findViewById<FloatingActionButton>(R.id.add_button).setOnClickListener {
+            // Open the Select Recipe Fragment.
+            startActivity(Intent(context, SelectRecipeActivity::class.java))
+        }
 
         return view
     }

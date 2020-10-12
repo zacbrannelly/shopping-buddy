@@ -10,6 +10,7 @@
     <string name="menu_weekly_planner">Weekly Planner</string>
     <string name="menu_recipe_library">Recipe Library</string>
     <string name="menu_shopping_list">Shopping List</string>
+    <string name="menu_search_hint">Search recipes...</string>
 
     <string name="list_item_heading_placeholder">Heading</string>
     <string name="list_item_sub_heading_placeholder">Sub-heading</string>
