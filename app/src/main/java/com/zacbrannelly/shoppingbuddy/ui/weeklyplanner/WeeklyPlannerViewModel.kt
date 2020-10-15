@@ -3,8 +3,8 @@ package com.zacbrannelly.shoppingbuddy.ui.weeklyplanner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.zacbrannelly.shoppingbuddy.data.Recipe
+import com.zacbrannelly.shoppingbuddy.data.RecipeWithIngredients
 import com.zacbrannelly.shoppingbuddy.ui.RecipeListItem
-import java.util.*
 import kotlin.collections.ArrayList
 
 private const val TAG = "WeeklyPlannerViewModel"
@@ -12,7 +12,7 @@ private const val TAG = "WeeklyPlannerViewModel"
 class WeeklyPlannerViewModel : ViewModel() {
     var recipes = MutableLiveData<List<RecipeListItem>>()
 
-    var planner = mutableMapOf<String, List<Recipe>>(
+    var planner = mutableMapOf<String, List<RecipeWithIngredients>>(
         "Monday"    to emptyList(),
         "Tuesday"   to emptyList(),
         "Wednesday" to emptyList(),
@@ -31,9 +31,9 @@ class WeeklyPlannerViewModel : ViewModel() {
     }
 
     private fun updatePlanner() {
-        var newMap = mutableMapOf<String, List<Recipe>>()
+        var newMap = mutableMapOf<String, List<RecipeWithIngredients>>()
         var lastHeading: String? = null
-        var newList: ArrayList<Recipe> = ArrayList()
+        var newList: ArrayList<RecipeWithIngredients> = ArrayList()
 
         for (listItem in recipes.value!!) {
             if (listItem.viewType == RecipeListItem.VIEW_TYPE_HEADER) {
@@ -43,7 +43,7 @@ class WeeklyPlannerViewModel : ViewModel() {
                 }
                 lastHeading = listItem.heading
             } else {
-                newList.add(listItem.recipe!!)
+                newList.add(listItem.recipeWithIngredients!!)
             }
         }
 

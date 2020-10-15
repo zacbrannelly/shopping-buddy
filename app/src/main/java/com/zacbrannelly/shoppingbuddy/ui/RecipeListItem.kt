@@ -1,15 +1,15 @@
 package com.zacbrannelly.shoppingbuddy.ui
 
-import com.zacbrannelly.shoppingbuddy.data.Recipe
+import com.zacbrannelly.shoppingbuddy.data.RecipeWithIngredients
 
 class RecipeListItem {
-    var recipe: Recipe? = null
+    var recipeWithIngredients: RecipeWithIngredients? = null
     var heading: String? = null
     var isDraggable: Boolean = false
     var viewType: Int
 
-    constructor(recipe: Recipe, isDraggable: Boolean = false) {
-        this.recipe = recipe
+    constructor(recipe: RecipeWithIngredients, isDraggable: Boolean = false) {
+        this.recipeWithIngredients = recipe
         this.viewType = VIEW_TYPE_ITEM
         this.isDraggable = isDraggable
     }

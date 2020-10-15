@@ -5,8 +5,9 @@ import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.google.gson.Gson
-import com.zacbrannelly.shoppingbuddy.data.AppDatabase
-import com.zacbrannelly.shoppingbuddy.data.InitialDataDto
+import com.google.gson.reflect.TypeToken
+import com.google.gson.stream.JsonReader
+import com.zacbrannelly.shoppingbuddy.data.*
 import kotlinx.coroutines.coroutineScope
 import java.lang.Exception
 
@@ -20,13 +21,46 @@ class PopulationWorker(
     override suspend fun doWork(): Result = coroutineScope {
         try {
             applicationContext.assets.open(INITIAL_DATA_FILE).use { inputStream ->
-                val data = Gson().fromJson(inputStream.reader(), InitialDataDto::class.java)
-                val database = AppDatabase.getInstance(applicationContext)
+                JsonReader(inputStream.reader()).use { jsonReader ->
+                    val type = object : TypeToken<List<FullRecipe>>() {}.type
+                    val recipes = Gson().fromJson<List<FullRecipe>>(jsonReader, type)
 
-                // Insert the recipes into the DB.
-                database.recipeDao().insertAll(data.recipes)
+                    val database = AppDatabase.getInstance(applicationContext)
 
-                Result.success()
+                    // Insert the recipes into the DB.
+                    database.recipeDao().insertAll(recipes.map { it.recipe })
+
+                    // Insert the recipes steps into the DB.
+                    database.stepDao().insertAll(recipes.flatMap { recipe ->
+                        recipe.steps.map {
+                            // Map step to recipe ID.
+                            return@map Step(
+                                recipe.recipe.id,
+                                it.step,
+                                it.description
+                            )
+                        }
+                    })
+
+                    // Insert the recipe ingredients into the DB.
+                    database.ingredientDao().insertAll(recipes.flatMap { recipe ->
+                        recipe.ingredients.map { it.ingredient }
+                    })
+
+                    // Insert the links b/w recipe and ingredients into the DB.
+                    database.recipeIngredientDao().insertAll(recipes.flatMap { recipe ->
+                        recipe.ingredients.map {
+                            // Map recipe to ingredient and quantity.
+                            return@map RecipeIngredient(
+                                recipe.recipe.id,
+                                it.ingredient.id,
+                                it.metadata.qty
+                            )
+                        }
+                    })
+
+                    Result.success()
+                }
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error populating DB: ", e)

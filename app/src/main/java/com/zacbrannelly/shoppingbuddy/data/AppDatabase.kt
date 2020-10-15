@@ -1,8 +1,6 @@
 package com.zacbrannelly.shoppingbuddy.data
 
 import android.content.Context
-import android.util.JsonReader
-import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -10,18 +8,21 @@ import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.zacbrannelly.shoppingbuddy.worker.PopulationWorker
-import kotlinx.coroutines.coroutineScope
 
 const val DATABASE_NAME = "shopping_buddy"
 
-@Database(entities = [Recipe::class], version = 1, exportSchema = false)
+@Database(entities = [Recipe::class, RecipeIngredient::class, Ingredient::class, Step::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun recipeDao(): RecipeDao
+
+    abstract fun ingredientDao(): IngredientDao
+
+    abstract fun recipeIngredientDao(): RecipeIngredientDao
+
+    abstract fun stepDao(): StepDao
 
     companion object {
         @Volatile private var instance: AppDatabase? = null
@@ -34,6 +35,7 @@ abstract class AppDatabase: RoomDatabase() {
 
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
+                .fallbackToDestructiveMigration()
                 .addCallback(object : RoomDatabase.Callback() {
                     override fun onCreate(db: SupportSQLiteDatabase) {
                         super.onCreate(db)

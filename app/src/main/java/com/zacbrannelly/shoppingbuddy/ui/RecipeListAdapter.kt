@@ -19,6 +19,7 @@ import com.google.android.material.shape.CornerFamily
 import com.zacbrannelly.shoppingbuddy.R
 import com.zacbrannelly.shoppingbuddy.data.Recipe
 import kotlinx.coroutines.*
+import java.lang.StringBuilder
 import java.util.*
 
 private const val TAG = "RecipeListAdapter"
@@ -30,6 +31,8 @@ class RecipeListAdapter(val context: Context,
     private var touchHelper: ItemTouchHelper? = null
     private var touchHelperListener = ItemMoveListener(context)
     private var items = emptyList<RecipeListItem>()
+
+    var onItemRemoved: ((Recipe) -> Unit)? = null
 
     // ItemTouchHelper listener that allows dragging items.
     inner class ItemMoveListener(private val context: Context) : ItemTouchHelper.Callback() {
@@ -141,18 +144,10 @@ class RecipeListAdapter(val context: Context,
                 .build()
         }
 
-        private fun loadImageFromAssets(path: String) = CoroutineScope(Dispatchers.Main).launch {
+        private fun loadImageFromAssets(recipe: Recipe) = CoroutineScope(Dispatchers.Main).launch {
             // Load the image in an IO thread.
             val task = async(Dispatchers.IO) {
-                var loadedImage: Bitmap? = null
-
-                // Load the image from the assets folder
-                context.assets.open(path).use { inputStream ->
-                    loadedImage = BitmapFactory.decodeStream(inputStream)
-                    Log.i(TAG, "Successfully loaded image from path: $path")
-                }
-
-                return@async loadedImage
+                return@async recipe.loadBitmap(context)
             }
 
             // Set the bitmap in the UI thread.
@@ -164,15 +159,19 @@ class RecipeListAdapter(val context: Context,
         override fun populate(item: RecipeListItem) {
             this.item = item
 
-            heading.text = item.recipe?.name
-            subHeading.text = item.recipe?.type
+            val recipe = item.recipeWithIngredients!!.recipe
+            val ingredients = item.recipeWithIngredients!!.ingredientsWithQty.map { i -> i.ingredient.name }
 
-            if (item.recipe!!.isImageAsset) {
-                loadImageFromAssets(item.recipe!!.image)
-            }
+            // Set text area's
+            heading.text = recipe.name
+            subHeading.text = recipe.type
+            caption.text = ingredients.joinToString()
+
+            // Load the image of the recipe
+            loadImageFromAssets(recipe)
 
             if (item.viewType == RecipeListItem.VIEW_TYPE_ITEM)
-                view.setOnClickListener { itemClickListener(item.recipe!!, image) }
+                view.setOnClickListener { itemClickListener(recipe, image) }
 
             // Hide the drag handle if not draggable.
             dragHandle.visibility =
@@ -209,11 +208,14 @@ class RecipeListAdapter(val context: Context,
     fun onRemoveItem(position: Int) {
         // Remove from the list
         val newList = items.toMutableList()
-        newList.removeAt(position)
+        val item = newList.removeAt(position)
 
         // Update the list
         items = newList
         notifyItemRemoved(position)
+
+        // Notify others of the removal
+        onItemRemoved?.invoke(item.recipeWithIngredients!!.recipe)
     }
 
     fun setItems(data: List<RecipeListItem>) {

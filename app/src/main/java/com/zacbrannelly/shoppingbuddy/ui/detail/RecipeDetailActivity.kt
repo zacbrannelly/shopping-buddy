@@ -4,33 +4,71 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.NavUtils
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.observe
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zacbrannelly.shoppingbuddy.R
+import com.zacbrannelly.shoppingbuddy.data.Recipe
 import com.zacbrannelly.shoppingbuddy.ui.ExpandableListAdapter
 import com.zacbrannelly.shoppingbuddy.ui.ExpandableListItem
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class RecipeDetailActivity : AppCompatActivity() {
     private lateinit var expandableList: RecyclerView
+    private lateinit var imageView: ImageView
+    private lateinit var heading: TextView
+    private lateinit var caption: TextView
     private lateinit var viewModel: RecipeDetailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe_detail)
 
+        imageView = findViewById(R.id.app_bar_image)
+        heading = findViewById(R.id.recipe_detail_heading)
+        caption = findViewById(R.id.recipe_detail_caption)
+
         viewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel::class.java)
+
+        // Retrieve recipe information when available.
+        viewModel.recipe.observe(this) {
+            heading.text = it.recipe.name
+            caption.text = it.recipe.type
+        }
+
+        // Retrieve recipe image when available.
+        viewModel.recipeImage.observe(this) {
+            imageView.setImageBitmap(it)
+        }
+
+        // Populate detail view with recipe
+        val recipe = intent.getParcelableExtra<Recipe>("recipe")
+        if (recipe != null) viewModel.loadRecipe(recipe)
+
+        val listAdapter = ExpandableListAdapter(
+            applicationContext,
+            listOf(
+                ExpandableListItem(R.drawable.ic_format_list_bulleted, "Ingredients"),
+                ExpandableListItem(R.drawable.ic_outdoor_grill, "Steps")
+            )
+        )
+
+        viewModel.expandableListItems.observe(this) {
+            // Update expandable list
+            listAdapter.setItems(it)
+        }
 
         expandableList = findViewById(R.id.expandable_list)
         expandableList.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = ExpandableListAdapter(context, listOf(
-                ExpandableListItem(R.drawable.ic_format_list_bulleted, "Ingredients"),
-                ExpandableListItem(R.drawable.ic_outdoor_grill, "Steps")
-            ))
+            adapter = listAdapter
         }
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
