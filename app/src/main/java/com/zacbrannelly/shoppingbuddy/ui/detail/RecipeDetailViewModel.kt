@@ -13,6 +13,8 @@ import com.zacbrannelly.shoppingbuddy.data.RecipeRepository
 import com.zacbrannelly.shoppingbuddy.ui.ExpandableListItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.math.ceil
+import kotlin.math.round
 
 class RecipeDetailViewModel(application: Application): AndroidViewModel(application) {
     private val database = AppDatabase.getInstance(application)
@@ -34,7 +36,8 @@ class RecipeDetailViewModel(application: Application): AndroidViewModel(applicat
 
             // Create expandable list of ingredients.
             val ingredients = fullRecipe.ingredients.map {
-                Pair(it.ingredient.name, "${it.metadata.qty} ${it.ingredient.units}")
+                val qty = ceil(it.metadata.qty).toInt()
+                Pair(it.ingredient.name, "$qty ${it.ingredient.units}")
             }
             items.add(ExpandableListItem(R.drawable.ic_shopping_icon, "Ingredients", ingredients, true))
 
