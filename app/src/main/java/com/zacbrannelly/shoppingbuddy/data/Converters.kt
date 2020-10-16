@@ -1,6 +1,5 @@
 package com.zacbrannelly.shoppingbuddy.data
 
-import android.net.Uri
 import androidx.room.TypeConverter
 import java.util.*
 
@@ -15,9 +14,9 @@ object Converters {
 
     @TypeConverter
     @JvmStatic
-    fun uriToString(uri: Uri) = uri.path
+    fun dayToString(day: Day) = day.toString()
 
     @TypeConverter
     @JvmStatic
-    fun stringToUri(string: String) = Uri.parse(string)
+    fun stringToDay(string: String) = Day.valueOf(string)
 }

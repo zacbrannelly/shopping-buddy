@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
@@ -19,20 +21,38 @@ import com.google.android.material.shape.CornerFamily
 import com.zacbrannelly.shoppingbuddy.R
 import com.zacbrannelly.shoppingbuddy.data.Recipe
 import kotlinx.coroutines.*
-import java.lang.StringBuilder
 import java.util.*
 
 private const val TAG = "RecipeListAdapter"
 
-class RecipeListAdapter(val context: Context,
-                        private val itemClickListener: (Recipe, ImageView) -> Unit,
-                        private val itemOrderChangedListener: (() -> Unit)? = null): RecyclerView.Adapter<RecipeListAdapter.ViewHolder>() {
+class RecipeListAdapter(val context: Context): RecyclerView.Adapter<RecipeListAdapter.ViewHolder>() {
+
+    private val differ = AsyncListDiffer(this, object : DiffUtil.ItemCallback<RecipeListItem>() {
+        override fun areItemsTheSame(oldItem: RecipeListItem, newItem: RecipeListItem): Boolean {
+            if (oldItem.viewType != newItem.viewType) return false
+
+            when (oldItem.viewType) {
+                RecipeListItem.VIEW_TYPE_HEADER ->
+                    return oldItem.heading == newItem.heading
+                RecipeListItem.VIEW_TYPE_ITEM ->
+                    return oldItem.recipeWithIngredients!!.recipe.id == newItem.recipeWithIngredients!!.recipe.id
+            }
+
+            return false
+        }
+
+        override fun areContentsTheSame(oldItem: RecipeListItem, newItem: RecipeListItem): Boolean {
+            return true
+        }
+    })
 
     private var touchHelper: ItemTouchHelper? = null
     private var touchHelperListener = ItemMoveListener(context)
     private var items = emptyList<RecipeListItem>()
 
-    var onItemRemoved: ((Recipe) -> Unit)? = null
+    var onItemClicked: ((Recipe, ImageView) -> Unit)? = null
+    var onItemOrderChanged: (() -> Unit)? = null
+    var onItemRemoved: ((Recipe, String?, Int?) -> Unit)? = null
 
     // ItemTouchHelper listener that allows dragging items.
     inner class ItemMoveListener(private val context: Context) : ItemTouchHelper.Callback() {
@@ -171,7 +191,7 @@ class RecipeListAdapter(val context: Context,
             loadImageFromAssets(recipe)
 
             if (item.viewType == RecipeListItem.VIEW_TYPE_ITEM)
-                view.setOnClickListener { itemClickListener(recipe, image) }
+                view.setOnClickListener { onItemClicked?.invoke(recipe, image) }
 
             // Hide the drag handle if not draggable.
             dragHandle.visibility =
@@ -202,25 +222,34 @@ class RecipeListAdapter(val context: Context,
         // Notify the system so the animation occurs.
         notifyItemMoved(fromPosition, toPosition)
 
-        itemOrderChangedListener?.invoke()
+        onItemOrderChanged?.invoke()
     }
 
     fun onRemoveItem(position: Int) {
-        // Remove from the list
-        val newList = items.toMutableList()
-        val item = newList.removeAt(position)
+        // Find heading and position from heading
+        var lastHeading: String? = null
+        var offset: Int? = null
 
-        // Update the list
-        items = newList
-        notifyItemRemoved(position)
+        for (i in items.indices) {
+            val item = items[i]
+            if (item.viewType == RecipeListItem.VIEW_TYPE_HEADER) {
+                offset = position - i
+                lastHeading = item.heading
+            }
+
+            if (i == position) {
+                break
+            }
+        }
 
         // Notify others of the removal
-        onItemRemoved?.invoke(item.recipeWithIngredients!!.recipe)
+        val item = differ.currentList[position]
+        onItemRemoved?.invoke(item.recipeWithIngredients!!.recipe, lastHeading, offset)
     }
 
     fun setItems(data: List<RecipeListItem>) {
         items = data
-        notifyDataSetChanged()
+        differ.submitList(data)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -247,13 +276,13 @@ class RecipeListAdapter(val context: Context,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.populate(items[position])
+        holder.populate(differ.currentList[position])
     }
 
     override fun getItemViewType(position: Int): Int {
-        return items[position].viewType
+        return differ.currentList[position].viewType
     }
 
-    override fun getItemCount() = items.size
+    override fun getItemCount() = differ.currentList.size
 }
 

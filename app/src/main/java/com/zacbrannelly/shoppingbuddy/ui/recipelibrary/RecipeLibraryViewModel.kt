@@ -8,6 +8,7 @@ import com.zacbrannelly.shoppingbuddy.data.AppDatabase
 import com.zacbrannelly.shoppingbuddy.data.Recipe
 import com.zacbrannelly.shoppingbuddy.data.RecipeRepository
 import com.zacbrannelly.shoppingbuddy.data.RecipeWithIngredients
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class RecipeLibraryViewModel(application: Application) : AndroidViewModel(application) {
@@ -24,7 +25,7 @@ class RecipeLibraryViewModel(application: Application) : AndroidViewModel(applic
     }
 
     fun deleteRecipe(recipe: Recipe) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             recipeRepository.deleteRecipe(recipe)
         }
     }

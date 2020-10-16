@@ -1,97 +1,136 @@
-[
-  {
-    "recipe": {
-      "id": "c9dc8d98-dee6-4239-a839-44a1c40ea055",
-      "name": "Ham & Cheese",
-      "type": "Sandwich",
-      "image": "ham_cheese_toast.jpg",
-      "isImageAsset": true
+{
+  "planners": [
+    {
+      "day": "MONDAY",
+      "recipeId": "c9dc8d98-dee6-4239-a839-44a1c40ea055",
+      "priority": 1
     },
-    "steps": [
-      {
-        "step": 0,
-        "description": "Spread butter on two pieces of bread."
-      },
-      {
-        "step": 1,
-        "description": "Fold each slice of ham onto a piece of bread."
-      },
-      {
-        "step": 2,
-        "description": "Place each slice of cheese onto a piece of bread."
-      },
-      {
-        "step": 3,
-        "description": "Put the other piece of bread on top and place in sandwich press."
-      },
-      {
-        "step": 4,
-        "description": "Keep in sandwich press until golden brown."
-      }
-    ],
-    "ingredients": [
-      {
-        "ingredient": {
-          "id": "f6512270-2190-4408-b077-4358cef94777",
-          "name": "Leg Ham",
-          "units": "slices"
-        },
-        "metadata": {
-          "qty": 2
-        }
-      },
-      {
-        "ingredient": {
-          "id": "58e6a3a1-3f01-458e-b747-e2914d6a9511",
-          "name": "Tasty Cheese",
-          "units": "slices"
-        },
-        "metadata": {
-          "qty": 5
-        }
-      }
-    ]
-  },
-  {
-    "recipe": {
-      "id": "59919df4-f0de-4748-b36f-a7902e51332f",
-      "name": "Butter Chicken",
-      "type": "Indian",
-      "image": "butter_chicken.jpg",
-      "isImageAsset": true
+    {
+      "day": "TUESDAY",
+      "recipeId": "c9dc8d98-dee6-4239-a839-44a1c40ea055",
+      "priority": 2
     },
-    "steps": [],
-    "ingredients": [
-      {
-        "ingredient": {
-          "id": "dc290ea2-dc8f-43e6-bae2-96bd686afdb9",
-          "name": "Chicken",
-          "units": "grams"
-        },
-        "metadata": {
-          "qty": 500
-        }
+    {
+      "day": "TUESDAY",
+      "recipeId": "59919df4-f0de-4748-b36f-a7902e51332f",
+      "priority": 1
+    },
+    {
+      "day": "WEDNESDAY",
+      "recipeId": "59919df4-f0de-4748-b36f-a7902e51332f",
+      "priority": 1
+    },
+    {
+      "day": "THURSDAY",
+      "recipeId": "c9dc8d98-dee6-4239-a839-44a1c40ea055",
+      "priority": 1
+    },
+    {
+      "day": "SATURDAY",
+      "recipeId": "c9dc8d98-dee6-4239-a839-44a1c40ea055",
+      "priority": 1
+    },
+    {
+      "day": "SUNDAY",
+      "recipeId": "59919df4-f0de-4748-b36f-a7902e51332f",
+      "priority": 1
+    }
+  ],
+  "recipes": [
+    {
+      "recipe": {
+        "id": "c9dc8d98-dee6-4239-a839-44a1c40ea055",
+        "name": "Ham & Cheese",
+        "type": "Sandwich",
+        "image": "ham_cheese_toast.jpg",
+        "isImageAsset": true
       },
-      {
-        "ingredient": {
-          "id": "c717dc67-3bcb-41dd-93ed-301f44754be5",
-          "name": "Butter chicken sauce",
-          "units": "grams"
+      "steps": [
+        {
+          "step": 0,
+          "description": "Spread butter on two pieces of bread."
         },
-        "metadata": {
-          "qty": 500
+        {
+          "step": 1,
+          "description": "Fold each slice of ham onto a piece of bread."
+        },
+        {
+          "step": 2,
+          "description": "Place each slice of cheese onto a piece of bread."
+        },
+        {
+          "step": 3,
+          "description": "Put the other piece of bread on top and place in sandwich press."
+        },
+        {
+          "step": 4,
+          "description": "Keep in sandwich press until golden brown."
         }
+      ],
+      "ingredients": [
+        {
+          "ingredient": {
+            "id": "f6512270-2190-4408-b077-4358cef94777",
+            "name": "Leg Ham",
+            "units": "slices"
+          },
+          "metadata": {
+            "qty": 2
+          }
+        },
+        {
+          "ingredient": {
+            "id": "58e6a3a1-3f01-458e-b747-e2914d6a9511",
+            "name": "Tasty Cheese",
+            "units": "slices"
+          },
+          "metadata": {
+            "qty": 5
+          }
+        }
+      ]
+    },
+    {
+      "recipe": {
+        "id": "59919df4-f0de-4748-b36f-a7902e51332f",
+        "name": "Butter Chicken",
+        "type": "Indian",
+        "image": "butter_chicken.jpg",
+        "isImageAsset": true
       },
-      {
-        "ingredient": {
-          "id": "13b77883-c0d9-4bba-aa57-1e28299fabf7",
-          "name": "Naan Bread",
-          "units": "slices"
+      "steps": [],
+      "ingredients": [
+        {
+          "ingredient": {
+            "id": "dc290ea2-dc8f-43e6-bae2-96bd686afdb9",
+            "name": "Chicken",
+            "units": "grams"
+          },
+          "metadata": {
+            "qty": 500
+          }
         },
-        "metadata": {
-          "qty": 5
+        {
+          "ingredient": {
+            "id": "c717dc67-3bcb-41dd-93ed-301f44754be5",
+            "name": "Butter chicken sauce",
+            "units": "grams"
+          },
+          "metadata": {
+            "qty": 500
+          }
+        },
+        {
+          "ingredient": {
+            "id": "13b77883-c0d9-4bba-aa57-1e28299fabf7",
+            "name": "Naan Bread",
+            "units": "slices"
+          },
+          "metadata": {
+            "qty": 5
+          }
         }
-      }
-    ]
-  }
-]
+      ]
+    }
+  ]
+}

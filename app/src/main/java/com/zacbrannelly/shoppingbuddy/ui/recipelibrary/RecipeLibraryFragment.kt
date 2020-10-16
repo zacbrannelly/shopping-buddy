@@ -47,40 +47,41 @@ class RecipeLibraryFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(RecipeLibraryViewModel::class.java)
 
-        val viewAdapter = RecipeListAdapter (requireContext(), { recipe, image ->
-            // Setup shared element transition.
-            val options = ActivityOptions.makeSceneTransitionAnimation(requireActivity(), Pair(image, "imageView"))
-
-            // Ensure last item selected has transition name reset.
-            lastSharedImageView?.transitionName = null
-
-            // Track the next image to be used in the animation.
-            lastSharedImageView = image
-            image.transitionName = "imageView"
-
-            // Start the detail activity.
-            startActivity(
-                Intent(context, RecipeDetailActivity::class.java).apply {
-                    putExtra("recipe", recipe)
-                },
-                options.toBundle()
-            )
-        })
+        val viewAdapter = RecipeListAdapter (requireContext())
 
         recipeList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = viewAdapter
         }
 
-        // Delete recipes from DB on request
-        viewAdapter.onItemRemoved = { recipe ->
-            viewModel.deleteRecipe(recipe)
-        }
+        // Notify the view model of list changes.
+        viewAdapter.onItemClicked = { item, image -> onRecipeSelected(item, image) }
+        viewAdapter.onItemRemoved = { recipe, _, _ -> viewModel.deleteRecipe(recipe) }
 
         viewModel.recipes.observe(viewLifecycleOwner) { items ->
             val listItems = items.map { recipe -> RecipeListItem(recipe, false) }
             viewAdapter.setItems(listItems)
         }
+    }
+
+    private fun onRecipeSelected(recipe: Recipe, image: ImageView) {
+        // Setup shared element transition.
+        val options = ActivityOptions.makeSceneTransitionAnimation(requireActivity(), Pair(image, "imageView"))
+
+        // Ensure last item selected has transition name reset.
+        lastSharedImageView?.transitionName = null
+
+        // Track the next image to be used in the animation.
+        lastSharedImageView = image
+        image.transitionName = "imageView"
+
+        // Start the detail activity.
+        startActivity(
+            Intent(context, RecipeDetailActivity::class.java).apply {
+                putExtra("recipe", recipe)
+            },
+            options.toBundle()
+        )
     }
 
 }

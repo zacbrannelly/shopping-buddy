@@ -1,11 +1,10 @@
-package com.zacbrannelly.shoppingbuddy.worker
+package com.zacbrannelly.shoppingbuddy.data.population
 
 import android.content.Context
 import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
 import com.zacbrannelly.shoppingbuddy.data.*
 import kotlinx.coroutines.coroutineScope
@@ -22,10 +21,10 @@ class PopulationWorker(
         try {
             applicationContext.assets.open(INITIAL_DATA_FILE).use { inputStream ->
                 JsonReader(inputStream.reader()).use { jsonReader ->
-                    val type = object : TypeToken<List<FullRecipe>>() {}.type
-                    val recipes = Gson().fromJson<List<FullRecipe>>(jsonReader, type)
-
+                    val data = Gson().fromJson<PopulationData>(jsonReader, PopulationData::class.java)
                     val database = AppDatabase.getInstance(applicationContext)
+
+                    val recipes = data.recipes
 
                     // Insert the recipes into the DB.
                     database.recipeDao().insertAll(recipes.map { it.recipe })
@@ -58,6 +57,9 @@ class PopulationWorker(
                             )
                         }
                     })
+
+                    // Insert all planners into the DB.
+                    database.plannerDao().insertAll(data.planners)
 
                     Result.success()
                 }

@@ -8,11 +8,21 @@ import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.zacbrannelly.shoppingbuddy.worker.PopulationWorker
+import com.zacbrannelly.shoppingbuddy.data.population.PopulationWorker
 
 const val DATABASE_NAME = "shopping_buddy"
 
-@Database(entities = [Recipe::class, RecipeIngredient::class, Ingredient::class, Step::class], version = 1, exportSchema = false)
+@Database(
+    entities = [
+        Recipe::class,
+        RecipeIngredient::class,
+        Ingredient::class,
+        Step::class,
+        Planner::class
+    ],
+    version = 1,
+    exportSchema = false
+)
 @TypeConverters(Converters::class)
 abstract class AppDatabase: RoomDatabase() {
 
@@ -23,6 +33,8 @@ abstract class AppDatabase: RoomDatabase() {
     abstract fun recipeIngredientDao(): RecipeIngredientDao
 
     abstract fun stepDao(): StepDao
+
+    abstract fun plannerDao(): PlannerDao
 
     companion object {
         @Volatile private var instance: AppDatabase? = null

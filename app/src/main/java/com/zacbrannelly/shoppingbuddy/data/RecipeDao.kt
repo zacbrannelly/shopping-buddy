@@ -16,7 +16,11 @@ interface RecipeDao {
 
     @Transaction
     @Query("SELECT * FROM recipes WHERE id = :id")
-    suspend fun findFullRecipe(id: UUID): FullRecipe?
+    fun findFullRecipe(id: UUID): FullRecipe?
+
+    @Transaction
+    @Query("SELECT * FROM recipes WHERE id = :id")
+    fun findRecipeWithIngredients(id: UUID): RecipeWithIngredients?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(recipe: Recipe)
