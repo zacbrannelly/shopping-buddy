@@ -37,12 +37,15 @@ class WeeklyPlannerViewModel(application: Application) : AndroidViewModel(applic
         recipes = Transformations.switchMap(plannerDays) { days ->
             val items = mutableListOf<RecipeListItem>()
 
-            days.forEach { day ->
+            // Update internal representation of the planner.
+            days.forEach { day -> planner[day.day] = day.recipes }
+
+            for (pair in planner) {
                 // Create a header for the day.
-                items.add(RecipeListItem(day.day.name.toLowerCase().capitalize()))
+                items.add(RecipeListItem(pair.key.name.toLowerCase().capitalize()))
 
                 // Create an item for each recipe planned for the day.
-                day.recipes.forEach { items.add(RecipeListItem(it, true)) }
+                pair.value.forEach { items.add(RecipeListItem(it, true)) }
             }
 
             MutableLiveData<List<RecipeListItem>>(items)
