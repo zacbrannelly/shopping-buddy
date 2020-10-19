@@ -91,6 +91,14 @@ class RecipeListAdapter(val context: Context): RecyclerView.Adapter<RecipeListAd
             return false
         }
 
+        override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+            super.clearView(recyclerView, viewHolder)
+
+            // This method is called when the order change is done and animation is complete.
+            // Notify the view model of the order change so it saves the change to DB.
+            onItemOrderChanged?.invoke()
+        }
+
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             // Notify the adapter of the removal.
             onRemoveItem(viewHolder.adapterPosition)
@@ -221,8 +229,7 @@ class RecipeListAdapter(val context: Context): RecyclerView.Adapter<RecipeListAd
 
         // Notify the system so the animation occurs.
         notifyItemMoved(fromPosition, toPosition)
-
-        onItemOrderChanged?.invoke()
+        differ.submitList(items)
     }
 
     fun onRemoveItem(position: Int) {
