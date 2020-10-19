@@ -26,14 +26,21 @@ class PlannerRepository(private val plannerDao: PlannerDao) {
         }
     }
 
+    suspend fun insertRecipePlan(day: Day, recipe: Recipe) {
+        val count = plannerDao.getPlannerRecipeCount(day)
+        if (count != null) {
+            val priority = count + 1
+            plannerDao.insert(Planner(day, recipe.id, priority))
+        }
+    }
+
     suspend fun savePlannerDays(plannerDays: List<PlannerDay>) {
         val planners = plannerDays.flatMap { plannerDay ->
             var index = 1
             plannerDay.recipes.map { Planner(plannerDay.day, it.recipe.id, index++) }
         }
 
-        plannerDao.deleteAll()
-        plannerDao.insertAll(planners)
+        plannerDao.clearAndInsertAll(planners)
     }
 
 }

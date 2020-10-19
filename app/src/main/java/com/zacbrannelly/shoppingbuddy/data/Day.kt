@@ -1,6 +1,7 @@
 package com.zacbrannelly.shoppingbuddy.data
 
 enum class Day {
+    UNPLANNED,
     MONDAY,
     TUESDAY,
     WEDNESDAY,

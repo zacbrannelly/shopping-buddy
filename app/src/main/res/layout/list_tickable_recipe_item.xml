@@ -15,7 +15,6 @@
                 android:layout_height="100dp"
                 android:layout_marginVertical="10dp"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ham_cheese_toast"
                 android:scaleType="centerCrop"
                 android:background="@color/colorPrimaryDark" />
 

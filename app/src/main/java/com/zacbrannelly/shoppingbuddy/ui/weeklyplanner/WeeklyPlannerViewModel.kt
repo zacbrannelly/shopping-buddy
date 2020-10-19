@@ -15,6 +15,7 @@ class WeeklyPlannerViewModel(application: Application) : AndroidViewModel(applic
     var recipes: LiveData<List<RecipeListItem>>
 
     private var planner = mutableMapOf<Day, List<RecipeWithIngredients>>(
+        Day.UNPLANNED to emptyList(),
         Day.MONDAY    to emptyList(),
         Day.TUESDAY   to emptyList(),
         Day.WEDNESDAY to emptyList(),

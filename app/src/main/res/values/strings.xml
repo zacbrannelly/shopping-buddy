@@ -18,4 +18,7 @@
         Proin vitae facilisis ex. Nullam in bibendum libero, ac gravida dolor.
         Donec convallis vel orci vitae tristique. Nulla rhoncus ex in tincidunt sodales.
     </string>
+
+    <string name="fab_select_recipe_singular">1 recipe selected</string>
+    <string name="fab_select_recipe_plural">%d recipes selected</string>
 </resources>
