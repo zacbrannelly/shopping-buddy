@@ -21,4 +21,11 @@
 
     <string name="fab_select_recipe_singular">1 recipe selected</string>
     <string name="fab_select_recipe_plural">%d recipes selected</string>
+
+    <string name="select_image">Select image...</string>
+    <string name="recipe_name">Recipe name</string>
+    <string name="recipe_type">Recipe type</string>
+    <string name="recipe_ingredient">Ingredient</string>
+    <string name="recipe_ingredient_qty">Qty + Units</string>
+    <string name="recipe_step">Step</string>
 </resources>

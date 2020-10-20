@@ -13,11 +13,13 @@ import android.widget.ImageView
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.zacbrannelly.shoppingbuddy.R
 import com.zacbrannelly.shoppingbuddy.data.Recipe
 import com.zacbrannelly.shoppingbuddy.ui.RecipeListAdapter
 import com.zacbrannelly.shoppingbuddy.ui.RecipeListItem
 import com.zacbrannelly.shoppingbuddy.ui.detail.RecipeDetailActivity
+import com.zacbrannelly.shoppingbuddy.ui.form.RecipeFormActivity
 import java.util.*
 
 class RecipeLibraryFragment : Fragment() {
@@ -28,6 +30,7 @@ class RecipeLibraryFragment : Fragment() {
 
     private lateinit var viewModel: RecipeLibraryViewModel
     private lateinit var recipeList: RecyclerView
+    private lateinit var addButton: FloatingActionButton
 
     private var lastSharedImageView: ImageView? = null
 
@@ -39,6 +42,7 @@ class RecipeLibraryFragment : Fragment() {
             .inflate(R.layout.fragment_recipe_library, container, false)
 
         recipeList = view.findViewById(R.id.recipe_list)
+        addButton = view.findViewById(R.id.add_button)
 
         return view
     }
@@ -61,6 +65,10 @@ class RecipeLibraryFragment : Fragment() {
         viewModel.recipes.observe(viewLifecycleOwner) { items ->
             val listItems = items.map { recipe -> RecipeListItem(recipe, false) }
             viewAdapter.setItems(listItems)
+        }
+
+        addButton.setOnClickListener {
+            startActivity(Intent(requireContext(), RecipeFormActivity::class.java))
         }
     }
 

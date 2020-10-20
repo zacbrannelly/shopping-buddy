@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ui.form.RecipeFormActivity"
+            android:label=""
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
             android:name=".ui.detail.RecipeDetailActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar">
