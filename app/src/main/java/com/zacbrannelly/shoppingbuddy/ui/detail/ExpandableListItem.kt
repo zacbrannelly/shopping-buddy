@@ -1,4 +1,4 @@
-package com.zacbrannelly.shoppingbuddy.ui
+package com.zacbrannelly.shoppingbuddy.ui.detail
 
 class ExpandableListItem(val icon: Int,
                          val header: String,

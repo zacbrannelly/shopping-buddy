@@ -1,4 +1,4 @@
-package com.zacbrannelly.shoppingbuddy.ui
+package com.zacbrannelly.shoppingbuddy.ui.detail
 
 import android.content.Context
 import android.view.*
@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.zacbrannelly.shoppingbuddy.R
-import com.zacbrannelly.shoppingbuddy.ui.detail.ItemListAdapter
 
 class ExpandableListAdapter(private val context: Context, private var items: List<ExpandableListItem>): RecyclerView.Adapter<ExpandableListAdapter.ViewHolder>() {
     inner class ViewHolder(val view: View, private val adapter: ItemListAdapter): RecyclerView.ViewHolder(view) {

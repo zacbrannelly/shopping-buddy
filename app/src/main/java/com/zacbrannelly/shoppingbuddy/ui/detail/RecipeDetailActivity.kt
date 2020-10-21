@@ -7,21 +7,14 @@ import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.NavUtils
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.observe
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.zacbrannelly.shoppingbuddy.R
 import com.zacbrannelly.shoppingbuddy.data.Recipe
-import com.zacbrannelly.shoppingbuddy.ui.ExpandableListAdapter
-import com.zacbrannelly.shoppingbuddy.ui.ExpandableListItem
 import com.zacbrannelly.shoppingbuddy.ui.form.RecipeFormActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class RecipeDetailActivity : AppCompatActivity() {
     private lateinit var expandableList: RecyclerView
@@ -59,13 +52,20 @@ class RecipeDetailActivity : AppCompatActivity() {
         val recipe = intent.getParcelableExtra<Recipe>("recipe")
         if (recipe != null) viewModel.loadRecipe(recipe)
 
-        val listAdapter = ExpandableListAdapter(
-            applicationContext,
-            listOf(
-                ExpandableListItem(R.drawable.ic_format_list_bulleted, "Ingredients"),
-                ExpandableListItem(R.drawable.ic_outdoor_grill, "Steps")
+        val listAdapter =
+            ExpandableListAdapter(
+                applicationContext,
+                listOf(
+                    ExpandableListItem(
+                        R.drawable.ic_format_list_bulleted,
+                        "Ingredients"
+                    ),
+                    ExpandableListItem(
+                        R.drawable.ic_outdoor_grill,
+                        "Steps"
+                    )
+                )
             )
-        )
 
         viewModel.expandableListItems.observe(this) {
             // Update expandable list
