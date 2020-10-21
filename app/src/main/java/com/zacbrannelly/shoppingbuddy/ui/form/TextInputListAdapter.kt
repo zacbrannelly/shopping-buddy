@@ -2,16 +2,12 @@ package com.zacbrannelly.shoppingbuddy.ui.form
 
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
-import com.zacbrannelly.shoppingbuddy.R
-import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class TextInputListAdapter(private val textInputLayout: Int, private val fields: List<Int>): RecyclerView.Adapter<TextInputListAdapter.ViewHolder>() {
     private var inputs = ArrayList<ArrayList<String>>()
@@ -97,4 +93,11 @@ class TextInputListAdapter(private val textInputLayout: Int, private val fields:
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.populate(position, if (position < inputs.size) inputs[position] else null)
     }
+
+    fun setFields(data: List<List<String>>) {
+        inputs.addAll(data.map { ArrayList<String>().apply { addAll(it) } })
+        notifyDataSetChanged()
+    }
+
+    fun getFields(): List<List<String>> = inputs
 }

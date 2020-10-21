@@ -16,7 +16,7 @@ interface RecipeDao {
 
     @Transaction
     @Query("SELECT * FROM recipes WHERE id = :id")
-    fun findFullRecipe(id: UUID): FullRecipe?
+    suspend fun findFullRecipe(id: UUID): FullRecipe?
 
     @Transaction
     @Query("SELECT * FROM recipes WHERE id = :id")

@@ -29,7 +29,7 @@
 
             <ImageView
                 android:id="@+id/app_bar_image"
-                android:src="@drawable/ham_cheese_toast"
+                android:src="@drawable/placeholder"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
@@ -87,5 +87,13 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_recipe_form" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_gravity="bottom|right"
+        android:src="@android:drawable/ic_menu_save"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

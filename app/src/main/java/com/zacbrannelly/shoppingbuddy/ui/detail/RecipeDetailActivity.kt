@@ -1,5 +1,6 @@
 package com.zacbrannelly.shoppingbuddy.ui.detail
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -13,10 +14,12 @@ import androidx.lifecycle.observe
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.zacbrannelly.shoppingbuddy.R
 import com.zacbrannelly.shoppingbuddy.data.Recipe
 import com.zacbrannelly.shoppingbuddy.ui.ExpandableListAdapter
 import com.zacbrannelly.shoppingbuddy.ui.ExpandableListItem
+import com.zacbrannelly.shoppingbuddy.ui.form.RecipeFormActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -25,6 +28,7 @@ class RecipeDetailActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView
     private lateinit var heading: TextView
     private lateinit var caption: TextView
+    private lateinit var editButton: FloatingActionButton
     private lateinit var viewModel: RecipeDetailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +38,9 @@ class RecipeDetailActivity : AppCompatActivity() {
         imageView = findViewById(R.id.app_bar_image)
         heading = findViewById(R.id.recipe_detail_heading)
         caption = findViewById(R.id.recipe_detail_caption)
+        editButton = findViewById(R.id.edit_button)
+
+        editButton.setOnClickListener { onEditClicked() }
 
         viewModel = ViewModelProviders.of(this).get(RecipeDetailViewModel::class.java)
 
@@ -87,5 +94,12 @@ class RecipeDetailActivity : AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun onEditClicked() {
+        val intent = Intent(baseContext, RecipeFormActivity::class.java).apply {
+            putExtra("recipe", viewModel.recipe.value)
+        }
+        startActivity(intent)
     }
 }

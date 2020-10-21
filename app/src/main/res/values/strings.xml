@@ -28,4 +28,8 @@
     <string name="recipe_ingredient">Ingredient</string>
     <string name="recipe_ingredient_qty">Qty + Units</string>
     <string name="recipe_step">Step</string>
+
+    <string name="take_picture">Take picture</string>
+    <string name="from_gallery">From gallery</string>
+    <string name="from_url">From URL</string>
 </resources>

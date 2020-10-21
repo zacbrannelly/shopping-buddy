@@ -10,6 +10,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.coroutineScope
+import java.io.File
+import java.io.FileInputStream
 import java.util.*
 
 @Entity(tableName = "recipes")
@@ -24,11 +26,19 @@ data class Recipe(
     suspend fun loadBitmap(context: Context): Bitmap? = coroutineScope {
         var loadedImage: Bitmap? = null
 
-        // Load the image from the assets folder
-        context.assets.open(image).use { inputStream ->
-            loadedImage = BitmapFactory.decodeStream(inputStream)
-            Log.i("Recipe", "Successfully loaded image from path: $image")
+        if (isImageAsset) {
+            // Load the image from the assets folder
+            context.assets.open(image).use { inputStream ->
+                loadedImage = BitmapFactory.decodeStream(inputStream)
+            }
+        } else {
+            // Load the image from the app's files directory
+            FileInputStream(File(context.filesDir, image)).also {
+                loadedImage = BitmapFactory.decodeStream(it)
+            }.close()
         }
+
+        Log.i("Recipe", "Successfully loaded image from path: $image")
 
         return@coroutineScope loadedImage
     }
