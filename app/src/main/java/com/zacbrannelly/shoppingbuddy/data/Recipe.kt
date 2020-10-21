@@ -18,10 +18,10 @@ import java.util.*
 @Parcelize
 data class Recipe(
     @PrimaryKey @ColumnInfo(name = "id") val id: UUID,
-    val name: String,
-    val type: String,
-    val image: String,
-    @ColumnInfo(name = "is_image_asset") val isImageAsset: Boolean
+    var name: String,
+    var type: String,
+    var image: String,
+    @ColumnInfo(name = "is_image_asset") var isImageAsset: Boolean
 ) : Parcelable {
     suspend fun loadBitmap(context: Context): Bitmap? = coroutineScope {
         var loadedImage: Bitmap? = null

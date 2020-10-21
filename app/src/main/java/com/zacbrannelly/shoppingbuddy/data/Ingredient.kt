@@ -10,6 +10,6 @@ import java.util.*
 @Entity(tableName = "ingredients")
 data class Ingredient(
     @PrimaryKey val id: UUID,
-    val name: String,
-    val units: String
+    var name: String,
+    var units: String
 ): Parcelable

@@ -24,5 +24,5 @@ import java.util.*
 data class Step(
     @ColumnInfo(name = "recipe_id") val recipeId: UUID,
     val step: Int,
-    val description: String
+    var description: String
 ): Parcelable

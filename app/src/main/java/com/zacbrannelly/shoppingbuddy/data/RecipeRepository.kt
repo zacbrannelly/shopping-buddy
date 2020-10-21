@@ -8,7 +8,9 @@ class RecipeRepository(private val dao: RecipeDao) {
 
     suspend fun insertRecipe(recipe: Recipe) = dao.insert(recipe)
 
-    suspend fun findFullRecipe(id: UUID): FullRecipe? = dao.findFullRecipe(id)
+    suspend fun updateRecipe(recipe: Recipe) = dao.update(recipe)
+
+    fun findFullRecipe(id: UUID): LiveData<FullRecipe> = dao.findFullRecipe(id)
 
     suspend fun deleteRecipe(recipe: Recipe) = dao.delete(recipe)
 }

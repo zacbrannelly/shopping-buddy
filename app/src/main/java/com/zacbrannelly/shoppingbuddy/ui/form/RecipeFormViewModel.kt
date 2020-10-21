@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 import java.util.*
+import kotlin.collections.ArrayList
 
 class RecipeFormViewModel(application: Application): AndroidViewModel(application) {
 
@@ -66,24 +67,8 @@ class RecipeFormViewModel(application: Application): AndroidViewModel(applicatio
             val recipeIngredients = ArrayList<Ingredient>()
             val joinRecords = ArrayList<RecipeIngredient>()
 
-            for (ingredientFields in ingredients) {
-                val name = ingredientFields[0]
-                val qtyAndUnits = ingredientFields[1].split(" ")
-                val units = qtyAndUnits[1]
-                val qty = qtyAndUnits[0].toDouble()
-
-                // Try to find the ingredient in the DB.
-                var ingredient = ingredientRepository.findByNameAndUnits(name, units)
-
-                if (ingredient == null) {
-                    ingredient = Ingredient(UUID.randomUUID(), name, units)
-                }
-
-                recipeIngredients.add(ingredient)
-
-                // Join Recipe -> Ingredient with quantity via join table
-                joinRecords.add(RecipeIngredient(recipe.id, ingredient.id, qty))
-            }
+            // Map each field to an ingredient.
+            mapFieldsToIngredients(recipe, recipeIngredients, joinRecords, ingredients)
 
             // Map step fields from view --> Step entities
             val recipeSteps = steps.mapIndexed { i, desc -> Step(recipe.id, i, desc[0]) }
@@ -96,8 +81,66 @@ class RecipeFormViewModel(application: Application): AndroidViewModel(applicatio
         }
     }
 
+    private suspend fun mapFieldsToIngredients(
+        recipe: Recipe,
+        recipeIngredients: ArrayList<Ingredient>,
+        joinRecords: ArrayList<RecipeIngredient>,
+        fields: List<List<String>>) {
+
+        for (ingredientFields in fields) {
+            val name = ingredientFields[0]
+            val qtyAndUnits = ingredientFields[1].split(" ")
+            val units = qtyAndUnits[1]
+            val qty = qtyAndUnits[0].toDouble()
+
+            // Try to find the ingredient in the DB.
+            var ingredient = ingredientRepository.findByNameAndUnits(name, units)
+
+            if (ingredient == null) {
+                ingredient = Ingredient(UUID.randomUUID(), name, units)
+            }
+
+            recipeIngredients.add(ingredient)
+
+            // Join Recipe -> Ingredient with quantity via join table
+            joinRecords.add(RecipeIngredient(recipe.id, ingredient.id, qty))
+        }
+    }
+
     private fun onUpdateExisting(name: String, type: String, ingredients: List<List<String>>, steps: List<List<String>>) {
-        // TODO: Update existing items in the DB.
+        // Update existing items in the DB in IO thread.
+        viewModelScope.launch(Dispatchers.IO) {
+            val fullRecipe = recipe.value!!
+
+            // Update the ame and type.
+            fullRecipe.recipe.name = name
+            fullRecipe.recipe.type = type
+
+            // Update the image.
+            if (!imagePath.isNullOrEmpty()) {
+                fullRecipe.recipe.image = imagePath!!
+                fullRecipe.recipe.isImageAsset = false
+            }
+
+            val newIngredients = ArrayList<Ingredient>()
+            val newJoins = ArrayList<RecipeIngredient>()
+            mapFieldsToIngredients(fullRecipe.recipe, newIngredients, newJoins, ingredients)
+
+            // Map step fields from view --> Step entities
+            val recipeSteps = steps.mapIndexed { i, desc -> Step(fullRecipe.recipe.id, i, desc[0]) }
+
+            // Update recipe
+            recipeRepository.updateRecipe(fullRecipe.recipe)
+
+            // Insert all the new ingredients
+            ingredientRepository.insertAll(newIngredients)
+
+            // Clear joins and insert new updated joins
+            ingredientRepository.clearAndInsertAllJoins(newJoins)
+
+            // Clear and insert steps
+            stepRepository.clearAndInsertAll(recipeSteps)
+        }
     }
 
     companion object {

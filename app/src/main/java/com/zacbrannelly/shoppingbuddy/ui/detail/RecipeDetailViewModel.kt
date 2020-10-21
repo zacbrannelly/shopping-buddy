@@ -2,9 +2,7 @@ package com.zacbrannelly.shoppingbuddy.ui.detail
 
 import android.app.Application
 import android.graphics.Bitmap
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.zacbrannelly.shoppingbuddy.R
 import com.zacbrannelly.shoppingbuddy.data.AppDatabase
 import com.zacbrannelly.shoppingbuddy.data.FullRecipe
@@ -22,17 +20,23 @@ class RecipeDetailViewModel(application: Application): AndroidViewModel(applicat
 
     var recipeImage: MutableLiveData<Bitmap> = MutableLiveData()
     var recipe: MutableLiveData<FullRecipe> = MutableLiveData()
-    var expandableListItems: MutableLiveData<List<ExpandableListItem>> = MutableLiveData()
+    var expandableListItems: MediatorLiveData<List<ExpandableListItem>> = MediatorLiveData()
 
     fun loadRecipe(data: Recipe) {
-        viewModelScope.launch(Dispatchers.IO) {
-            // Fetch the full recipe (including ingredients and steps).
-            val fullRecipe = recipeRepository.findFullRecipe(data.id) ?: return@launch
+        // Retrieve the full recipe as live data, so updates are shown
+        val liveData = recipeRepository.findFullRecipe(data.id)
 
-            // Load the image attached to the recipe.
-            val bitmap = fullRecipe.recipe.loadBitmap(getApplication())
+        val transformation = Transformations.switchMap(liveData) { fullRecipe ->
+            viewModelScope.launch(Dispatchers.IO) {
+                // Load the image attached to the recipe and show on screen.
+                val bitmap = fullRecipe.recipe.loadBitmap(getApplication())
+                recipeImage.postValue(bitmap)
+            }
 
-            val items = ArrayList<ExpandableListItem>()
+            // Update the recipe shown on the screen.
+            recipe.value = fullRecipe
+
+            val items = mutableListOf<ExpandableListItem>()
 
             // Create expandable list of ingredients.
             val ingredients = fullRecipe.ingredients.map {
@@ -48,10 +52,12 @@ class RecipeDetailViewModel(application: Application): AndroidViewModel(applicat
                 items.add(ExpandableListItem(R.drawable.ic_outdoor_grill, "Steps", steps, true))
             }
 
-            // Safely set the results on a main thread.
-            recipeImage.postValue(bitmap)
-            recipe.postValue(fullRecipe)
-            expandableListItems.postValue(items)
+            MutableLiveData<List<ExpandableListItem>>(items)
+        }
+
+        // Update the expandable list when updates occur
+        expandableListItems.addSource(transformation) {
+            expandableListItems.value = it
         }
     }
 }
