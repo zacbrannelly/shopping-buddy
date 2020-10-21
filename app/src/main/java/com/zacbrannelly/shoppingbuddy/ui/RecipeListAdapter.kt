@@ -42,7 +42,21 @@ class RecipeListAdapter(val context: Context): RecyclerView.Adapter<RecipeListAd
         }
 
         override fun areContentsTheSame(oldItem: RecipeListItem, newItem: RecipeListItem): Boolean {
-            return true
+            if (oldItem.viewType == RecipeListItem.VIEW_TYPE_HEADER) return true
+
+            val oldRecipe = oldItem.recipeWithIngredients!!
+            val newRecipe = newItem.recipeWithIngredients!!
+
+            return (
+                oldRecipe.recipe.name == newRecipe.recipe.name &&
+                oldRecipe.recipe.type == newRecipe.recipe.type &&
+                oldRecipe.recipe.image == newRecipe.recipe.image &&
+                oldRecipe.ingredientsWithQty.all { oldIng ->
+                    newRecipe.ingredientsWithQty.any {
+                        it.ingredient.id == oldIng.ingredient.id
+                    }
+                }
+            )
         }
     })
 
