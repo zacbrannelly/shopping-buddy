@@ -22,11 +22,12 @@
                 android:id="@+id/list_item_image"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
+                android:src="@drawable/placeholder"
                 android:scaleType="centerCrop"
                 android:background="@color/colorPrimaryDark" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:paddingVertical="10dp"
