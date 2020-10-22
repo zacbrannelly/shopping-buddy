@@ -23,19 +23,32 @@ data class Recipe(
     var image: String,
     @ColumnInfo(name = "is_image_asset") var isImageAsset: Boolean
 ) : Parcelable {
+    suspend fun loadFromAssets(context: Context, path: String): Bitmap? = coroutineScope {
+        var loadedImage: Bitmap? = null
+
+        // Load the image from the assets folder
+        context.assets.open(path).use { inputStream ->
+            loadedImage = BitmapFactory.decodeStream(inputStream)
+        }
+
+        return@coroutineScope loadedImage
+    }
+
     suspend fun loadBitmap(context: Context): Bitmap? = coroutineScope {
         var loadedImage: Bitmap? = null
 
         if (isImageAsset) {
-            // Load the image from the assets folder
-            context.assets.open(image).use { inputStream ->
-                loadedImage = BitmapFactory.decodeStream(inputStream)
-            }
+            loadedImage = loadFromAssets(context, image)
         } else {
-            // Load the image from the app's files directory
-            FileInputStream(File(context.filesDir, image)).also {
-                loadedImage = BitmapFactory.decodeStream(it)
-            }.close()
+            try {
+                // Load the image from the app's files directory
+                FileInputStream(File(context.filesDir, image)).also {
+                    loadedImage = BitmapFactory.decodeStream(it)
+                }.close()
+            } catch (e: Exception) {
+                Log.e("Recipe", "Failed to load image: $image, using placeholder instead.")
+                loadedImage = loadFromAssets(context, "placeholder.jpg")
+            }
         }
 
         Log.i("Recipe", "Successfully loaded image from path: $image")
