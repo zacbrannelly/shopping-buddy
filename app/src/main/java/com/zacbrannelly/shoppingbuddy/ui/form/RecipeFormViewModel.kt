@@ -34,9 +34,17 @@ class RecipeFormViewModel(application: Application): AndroidViewModel(applicatio
         recipe.value = data
     }
 
-    fun onBitmapLoaded(bitmap: Bitmap) {
+    fun onBitmapLoaded(bitmap: Bitmap) = viewModelScope.launch(Dispatchers.IO) {
         val application = getApplication<Application>()
         imagePath = "${UUID.randomUUID()}.jpg"
+
+        if (recipe.value != null) {
+            val recipe = recipe.value!!
+            if (!recipe.recipe.isImageAsset) {
+                val existingImage = File(application.filesDir, recipe.recipe.image)
+                if (existingImage.exists()) existingImage.delete()
+            }
+        }
 
         try {
             // Save bitmap to data folder.
