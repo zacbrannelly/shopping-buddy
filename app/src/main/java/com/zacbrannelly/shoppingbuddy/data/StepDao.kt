@@ -12,8 +12,8 @@ interface StepDao {
     suspend fun deleteAll(recipeId: UUID)
 
     @Transaction
-    suspend fun clearAndInsertAll(steps: List<Step>) {
-        deleteAll(steps[0].recipeId)
+    suspend fun clearAndInsertAll(recipeId: UUID, steps: List<Step>) {
+        deleteAll(recipeId)
         insertAll(steps)
     }
 }

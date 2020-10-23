@@ -144,10 +144,10 @@ class RecipeFormViewModel(application: Application): AndroidViewModel(applicatio
             ingredientRepository.insertAll(newIngredients)
 
             // Clear joins and insert new updated joins
-            ingredientRepository.clearAndInsertAllJoins(newJoins)
+            ingredientRepository.clearAndInsertAllJoins(fullRecipe.recipe.id, newJoins)
 
             // Clear and insert steps
-            stepRepository.clearAndInsertAll(recipeSteps)
+            stepRepository.clearAndInsertAll(fullRecipe.recipe.id, recipeSteps)
         }
     }
 
