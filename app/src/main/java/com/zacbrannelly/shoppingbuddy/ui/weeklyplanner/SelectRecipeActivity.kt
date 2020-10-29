@@ -42,7 +42,7 @@ class SelectRecipeActivity: AppCompatActivity() {
         doneButton = findViewById(R.id.done_button)
         doneButton.setOnClickListener {
             viewModel.onConfirm()
-            onBackPressed()
+            finish()
         }
 
         val viewAdapter = SelectRecipeListAdapter(baseContext)
