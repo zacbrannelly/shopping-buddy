@@ -22,6 +22,10 @@ interface RecipeDao {
     @Query("SELECT * FROM recipes WHERE id = :id")
     fun findRecipeWithIngredients(id: UUID): RecipeWithIngredients?
 
+    @Transaction
+    @Query("SELECT * FROM recipes WHERE name LIKE '%' || :query || '%'")
+    suspend fun searchAllRecipeWithIngredients(query: String): List<RecipeWithIngredients>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(recipe: Recipe)
 

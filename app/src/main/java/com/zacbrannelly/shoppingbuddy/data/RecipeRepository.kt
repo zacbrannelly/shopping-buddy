@@ -12,5 +12,7 @@ class RecipeRepository(private val dao: RecipeDao) {
 
     fun findFullRecipe(id: UUID): LiveData<FullRecipe> = dao.findFullRecipe(id)
 
+    suspend fun searchRecipeWithIngredients(query: String) = dao.searchAllRecipeWithIngredients(query)
+
     suspend fun deleteRecipe(recipe: Recipe) = dao.delete(recipe)
 }

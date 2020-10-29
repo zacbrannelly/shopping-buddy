@@ -5,11 +5,10 @@ import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Pair
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.SearchView
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,6 +42,7 @@ class RecipeLibraryFragment : Fragment() {
 
         recipeList = view.findViewById(R.id.recipe_list)
         addButton = view.findViewById(R.id.add_button)
+        setHasOptionsMenu(true)
 
         return view
     }
@@ -70,6 +70,29 @@ class RecipeLibraryFragment : Fragment() {
         addButton.setOnClickListener {
             startActivity(Intent(requireContext(), RecipeFormActivity::class.java))
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        val searchAction = menu.findItem(R.id.app_bar_search)
+        val searchView = searchAction.actionView as SearchView
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(text: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(text: String?): Boolean {
+                viewModel.queryRecipes(text)
+                return false
+            }
+
+        })
     }
 
     private fun onRecipeSelected(recipe: Recipe, image: ImageView) {

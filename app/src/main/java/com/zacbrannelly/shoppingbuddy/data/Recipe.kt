@@ -23,7 +23,7 @@ data class Recipe(
     var image: String,
     @ColumnInfo(name = "is_image_asset") var isImageAsset: Boolean
 ) : Parcelable {
-    suspend fun loadFromAssets(context: Context, path: String): Bitmap? = coroutineScope {
+    private suspend fun loadFromAssets(context: Context, path: String): Bitmap? = coroutineScope {
         var loadedImage: Bitmap? = null
 
         // Load the image from the assets folder

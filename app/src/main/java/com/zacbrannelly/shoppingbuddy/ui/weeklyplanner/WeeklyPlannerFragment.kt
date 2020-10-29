@@ -5,10 +5,8 @@ import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Pair
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
@@ -47,6 +45,8 @@ class WeeklyPlannerFragment : Fragment() {
             startActivity(Intent(context, SelectRecipeActivity::class.java))
         }
 
+        setHasOptionsMenu(true)
+
         return view
     }
 
@@ -72,6 +72,13 @@ class WeeklyPlannerFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = viewAdapter
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        // Hide the search action
+        menu.findItem(R.id.app_bar_search).isVisible = false
     }
 
     private fun onRecipeSelected(item: Recipe, image: ImageView) {
