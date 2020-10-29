@@ -8,10 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.zacbrannelly.shoppingbuddy.R
 import com.zacbrannelly.shoppingbuddy.data.Ingredient
+import com.zacbrannelly.shoppingbuddy.data.ShoppingListItem
 
 class ShoppingListAdapter: RecyclerView.Adapter<ShoppingListAdapter.ViewHolder>(){
 
-    var onItemSelected: (() -> Unit)? = null
+    var onItemSelected: ((Ingredient, Boolean) -> Unit)? = null
 
     private var items: List<ShoppingListItem> = emptyList()
 
@@ -37,7 +38,7 @@ class ShoppingListAdapter: RecyclerView.Adapter<ShoppingListAdapter.ViewHolder>(
 
             // Listen for changes, invoke lambda and set state to current data instance.
             checkBox.setOnCheckedChangeListener { _, checked ->
-                onItemSelected?.invoke()
+                onItemSelected?.invoke(item.ingredient, checked)
                 item.isChecked = checked
             }
         }

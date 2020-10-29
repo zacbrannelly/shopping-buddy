@@ -2,10 +2,9 @@ package com.zacbrannelly.shoppingbuddy.ui.shoppinglist
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.view.*
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +23,7 @@ class ShoppingListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_shopping_list, container, false).also {
             shoppingList = it.findViewById(R.id.shopping_list)
         }
@@ -42,9 +42,26 @@ class ShoppingListFragment : Fragment() {
                 }
 
                 // Trigger view model to save state to the DB.
-                adapter.onItemSelected = { viewModel.saveCurrentState() }
+                adapter.onItemSelected = { ingredient, checked ->
+                    viewModel.updateItem(ingredient, checked)
+                }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        val searchView = menu.findItem(R.id.app_bar_search).actionView as SearchView
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?) = false
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                viewModel.queryIngredients(query)
+                return false
+            }
+        })
     }
 
 }
