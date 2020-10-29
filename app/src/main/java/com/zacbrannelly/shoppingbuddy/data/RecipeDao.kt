@@ -7,11 +7,11 @@ import java.util.*
 @Dao
 interface RecipeDao {
     @Transaction
-    @Query("SELECT * FROM recipes")
+    @Query("SELECT * FROM recipes ORDER BY name")
     fun getAllRecipesWithIngredients(): LiveData<List<RecipeWithIngredients>>
 
     @Transaction
-    @Query("SELECT * FROM recipes")
+    @Query("SELECT * FROM recipes ORDER BY name")
     fun getAllFullRecipes(): LiveData<List<FullRecipe>>
 
     @Transaction
@@ -23,7 +23,7 @@ interface RecipeDao {
     fun findRecipeWithIngredients(id: UUID): RecipeWithIngredients?
 
     @Transaction
-    @Query("SELECT * FROM recipes WHERE name LIKE '%' || :query || '%'")
+    @Query("SELECT * FROM recipes WHERE name LIKE '%' || :query || '%' ORDER BY name")
     suspend fun searchAllRecipeWithIngredients(query: String): List<RecipeWithIngredients>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

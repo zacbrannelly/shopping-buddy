@@ -20,7 +20,8 @@ interface ShoppingListDao {
             "INNER JOIN recipe_ingredients AS ri ON r.id = ri.recipe_id " +
             "INNER JOIN ingredients AS i ON ri.ingredient_id = i.id " +
             "LEFT JOIN shopping_list as s ON s.ingredientId = i.id " +
-            "GROUP BY i.id, ri.qty"
+            "GROUP BY i.id, ri.qty " +
+            "ORDER BY i.name"
     )
     suspend fun getShoppingList(): List<ShoppingListItem>
 
@@ -30,7 +31,8 @@ interface ShoppingListDao {
             "INNER JOIN ingredients AS i ON ri.ingredient_id = i.id " +
             "LEFT JOIN shopping_list as s ON s.ingredientId = i.id " +
             "WHERE i.name LIKE '%' || :query || '%'" +
-            "GROUP BY i.id, ri.qty"
+            "GROUP BY i.id, ri.qty " +
+            "ORDER BY i.name"
     )
     suspend fun searchShoppingList(query: String): List<ShoppingListItem>
 
