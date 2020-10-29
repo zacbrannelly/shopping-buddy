@@ -10,7 +10,7 @@
     <string name="menu_weekly_planner">Weekly Planner</string>
     <string name="menu_recipe_library">Recipe Library</string>
     <string name="menu_shopping_list">Shopping List</string>
-    <string name="menu_search_hint">Search recipes...</string>
+    <string name="menu_search_hint">Search recipes…</string>
 
     <string name="list_item_heading_placeholder">Heading</string>
     <string name="list_item_sub_heading_placeholder">Sub-heading</string>
@@ -22,7 +22,7 @@
     <string name="fab_select_recipe_singular">1 recipe selected</string>
     <string name="fab_select_recipe_plural">%d recipes selected</string>
 
-    <string name="select_image">Select image...</string>
+    <string name="select_image">Select image…</string>
     <string name="recipe_name">Recipe name</string>
     <string name="recipe_type">Recipe type</string>
     <string name="recipe_ingredient">Ingredient</string>
@@ -32,4 +32,6 @@
     <string name="take_picture">Take picture</string>
     <string name="from_gallery">From gallery</string>
     <string name="from_url">From URL</string>
+
+    <string name="shopping_list_caption">Ingredients to buy this week…</string>
 </resources>

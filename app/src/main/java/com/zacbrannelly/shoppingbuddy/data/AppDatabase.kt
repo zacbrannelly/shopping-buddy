@@ -18,7 +18,8 @@ const val DATABASE_NAME = "shopping_buddy"
         RecipeIngredient::class,
         Ingredient::class,
         Step::class,
-        Planner::class
+        Planner::class,
+        ShoppingList::class
     ],
     version = 1,
     exportSchema = false
@@ -35,6 +36,8 @@ abstract class AppDatabase: RoomDatabase() {
     abstract fun stepDao(): StepDao
 
     abstract fun plannerDao(): PlannerDao
+
+    abstract fun shoppingListDao(): ShoppingListDao
 
     companion object {
         @Volatile private var instance: AppDatabase? = null

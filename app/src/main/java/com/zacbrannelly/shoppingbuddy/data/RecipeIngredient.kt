@@ -24,5 +24,5 @@ import java.util.*
 data class RecipeIngredient(
     @ColumnInfo(name = "recipe_id") val recipeId: UUID,
     @ColumnInfo(name = "ingredient_id") val ingredientId: UUID,
-    val qty: Double
+    var qty: Double
 ): Parcelable
