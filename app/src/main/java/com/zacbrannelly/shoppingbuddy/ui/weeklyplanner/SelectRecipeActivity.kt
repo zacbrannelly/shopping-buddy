@@ -1,5 +1,6 @@
 package com.zacbrannelly.shoppingbuddy.ui.weeklyplanner
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -42,6 +43,7 @@ class SelectRecipeActivity: AppCompatActivity() {
         doneButton = findViewById(R.id.done_button)
         doneButton.setOnClickListener {
             viewModel.onConfirm()
+            setResult(Activity.RESULT_OK)
             finish()
         }
 

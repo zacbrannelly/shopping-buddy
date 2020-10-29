@@ -1,14 +1,17 @@
 package com.zacbrannelly.shoppingbuddy.ui.weeklyplanner
 
+import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import android.util.Pair
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.ImageView
 import androidx.lifecycle.observe
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,13 +21,14 @@ import com.zacbrannelly.shoppingbuddy.data.Recipe
 import com.zacbrannelly.shoppingbuddy.data.RecipeWithIngredients
 import com.zacbrannelly.shoppingbuddy.ui.RecipeListAdapter
 import com.zacbrannelly.shoppingbuddy.ui.detail.RecipeDetailActivity
-
-private const val TAG = "WeeklyPlannerFragment"
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class WeeklyPlannerFragment : Fragment() {
 
     companion object {
-        fun newInstance() = WeeklyPlannerFragment()
+        private const val TAG = "WeeklyPlannerFragment"
+        private const val SELECT_RECIPE_REQUEST = 1
     }
 
     private lateinit var viewModel: WeeklyPlannerViewModel
@@ -42,7 +46,10 @@ class WeeklyPlannerFragment : Fragment() {
 
         view.findViewById<FloatingActionButton>(R.id.add_button).setOnClickListener {
             // Open the Select Recipe Fragment.
-            startActivity(Intent(context, SelectRecipeActivity::class.java))
+            startActivityForResult(
+                Intent(context, SelectRecipeActivity::class.java),
+                SELECT_RECIPE_REQUEST
+            )
         }
 
         setHasOptionsMenu(true)
@@ -79,6 +86,21 @@ class WeeklyPlannerFragment : Fragment() {
 
         // Hide the search action
         menu.findItem(R.id.app_bar_search).isVisible = false
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // If coming back from adding recipes to the planner, scroll to the top.
+        if (requestCode == SELECT_RECIPE_REQUEST && resultCode == Activity.RESULT_OK) {
+            viewModel.viewModelScope.launch {
+                // Wait some time so the items can be added to the top of the list.
+                delay(500)
+
+                // Smoothly scroll to the top of the planner.
+                recipeList.smoothScrollToPosition(0)
+            }
+        }
     }
 
     private fun onRecipeSelected(item: Recipe, image: ImageView) {

@@ -7,6 +7,7 @@ import com.zacbrannelly.shoppingbuddy.data.*
 import com.zacbrannelly.shoppingbuddy.ui.RecipeListItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 import kotlin.collections.ArrayList
 
 private const val TAG = "WeeklyPlannerViewModel"
@@ -14,7 +15,7 @@ private const val TAG = "WeeklyPlannerViewModel"
 class WeeklyPlannerViewModel(application: Application) : AndroidViewModel(application) {
     var recipes: LiveData<List<RecipeListItem>>
 
-    private var planner = mutableMapOf<Day, List<RecipeWithIngredients>>(
+    private var planner = TreeMap<Day, List<RecipeWithIngredients>>(mapOf(
         Day.UNPLANNED to emptyList(),
         Day.MONDAY    to emptyList(),
         Day.TUESDAY   to emptyList(),
@@ -23,7 +24,7 @@ class WeeklyPlannerViewModel(application: Application) : AndroidViewModel(applic
         Day.FRIDAY    to emptyList(),
         Day.SATURDAY  to emptyList(),
         Day.SUNDAY    to emptyList()
-    )
+    ))
 
     private val plannerRepository: PlannerRepository
     private val plannerDays: LiveData<List<PlannerDay>>
@@ -42,6 +43,11 @@ class WeeklyPlannerViewModel(application: Application) : AndroidViewModel(applic
             days.forEach { day -> planner[day.day] = day.recipes }
 
             for (pair in planner) {
+                // Skip adding UNPLANNED day header if no meals unplanned.
+                if (pair.value.isEmpty() && pair.key == Day.UNPLANNED) {
+                    continue
+                }
+
                 // Create a header for the day.
                 items.add(RecipeListItem(pair.key.name.toLowerCase().capitalize()))
 
@@ -83,7 +89,7 @@ class WeeklyPlannerViewModel(application: Application) : AndroidViewModel(applic
     }
 
     private fun updatePlanner() {
-        var newMap = mutableMapOf<Day, List<RecipeWithIngredients>>()
+        var newMap = TreeMap<Day, List<RecipeWithIngredients>>()
         var lastHeading: String? = null
         var newList: ArrayList<RecipeWithIngredients> = ArrayList()
 
