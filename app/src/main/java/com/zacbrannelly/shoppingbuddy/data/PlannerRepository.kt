@@ -43,4 +43,5 @@ class PlannerRepository(private val plannerDao: PlannerDao) {
         plannerDao.clearAndInsertAll(planners)
     }
 
+    suspend fun deleteAll() = plannerDao.deleteAll()
 }

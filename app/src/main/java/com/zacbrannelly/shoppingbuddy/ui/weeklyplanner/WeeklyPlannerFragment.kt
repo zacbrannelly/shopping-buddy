@@ -88,6 +88,14 @@ class WeeklyPlannerFragment : Fragment() {
         menu.findItem(R.id.app_bar_search).isVisible = false
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_clear_all) {
+            viewModel.onClearAll()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

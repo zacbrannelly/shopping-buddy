@@ -72,16 +72,16 @@ class RecipeLibraryFragment : Fragment() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return super.onOptionsItemSelected(item)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
+
+        // Disable the clear all action.
+        menu.findItem(R.id.action_clear_all).isVisible = false
 
         val searchAction = menu.findItem(R.id.app_bar_search)
         val searchView = searchAction.actionView as SearchView
 
+        // Listen for search queries, tell view model to filter the list based on the query.
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(text: String?): Boolean {
                 return false

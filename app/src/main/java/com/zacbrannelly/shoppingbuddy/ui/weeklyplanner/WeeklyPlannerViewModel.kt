@@ -39,7 +39,10 @@ class WeeklyPlannerViewModel(application: Application) : AndroidViewModel(applic
         recipes = Transformations.switchMap(plannerDays) { days ->
             val items = mutableListOf<RecipeListItem>()
 
-            // Update internal representation of the planner.
+            // If no planner present, clear out internal representation.
+            if (days.isEmpty()) planner.keys.forEach { planner[it] = emptyList() }
+
+            // Update internal representation of the planner with DB.
             days.forEach { day -> planner[day.day] = day.recipes }
 
             for (pair in planner) {
@@ -56,6 +59,13 @@ class WeeklyPlannerViewModel(application: Application) : AndroidViewModel(applic
             }
 
             MutableLiveData<List<RecipeListItem>>(items)
+        }
+    }
+
+    fun onClearAll() {
+        viewModelScope.launch(Dispatchers.IO) {
+            // Clear out the planner table.
+            plannerRepository.deleteAll()
         }
     }
 

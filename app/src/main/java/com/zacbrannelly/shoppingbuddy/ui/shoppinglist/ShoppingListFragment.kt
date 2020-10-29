@@ -52,8 +52,12 @@ class ShoppingListFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
+        // Disable the clear all action.
+        menu.findItem(R.id.action_clear_all).isVisible = false
+
         val searchView = menu.findItem(R.id.app_bar_search).actionView as SearchView
 
+        // Listen for search queries, notify the view model to filter the list based on the query.
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?) = false
 
