@@ -7,10 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import kotlin.collections.ArrayList
 
 class TextInputListAdapter(private val textInputLayout: Int, private val fields: List<Int>): RecyclerView.Adapter<TextInputListAdapter.ViewHolder>() {
     private var inputs = ArrayList<ArrayList<String>>()
+    private var errors = HashMap<Int, List<String?>>()
 
     open inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         // Retrieve all fields registered in the fields property.
@@ -33,7 +35,7 @@ class TextInputListAdapter(private val textInputLayout: Int, private val fields:
             }
 
             // If it was a non-empty change there was no value for this field in state, create one.
-            // If it was a non-empty change and there was a value, update the value.
+            // If it was a non-empty change and there was a value, update the state.
             if (!emptyCheck) {
                 val newData = ArrayList<String>()
                 newData.addAll(inputFields.map { it.text.toString() })
@@ -47,13 +49,27 @@ class TextInputListAdapter(private val textInputLayout: Int, private val fields:
             }
         }
 
-        fun populate(index: Int, value: ArrayList<String>?) {
+        fun populate(value: ArrayList<String>?) {
             // Remove previous watchers.
             textWatchers.forEachIndexed { i, w -> inputFields[i].removeTextChangedListener(w) }
             textWatchers.clear()
 
             // Set the fields in the view holder
             inputFields.forEachIndexed { i, field ->
+                val layout = field.parent.parent as TextInputLayout
+
+                // Reset error state for field
+                layout.error = null
+                layout.isErrorEnabled = false
+
+                // Apply error to field
+                if (errors.containsKey(adapterPosition)) {
+                    val messages = errors[adapterPosition]
+                    if (i < messages!!.size) {
+                        layout.error = messages[i]
+                    }
+                }
+
                 if (!value.isNullOrEmpty()) {
                     field.setText(value[i])
                 } else {
@@ -91,7 +107,17 @@ class TextInputListAdapter(private val textInputLayout: Int, private val fields:
     override fun getItemCount() = inputs.size + 1
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.populate(position, if (position < inputs.size) inputs[position] else null)
+        holder.populate(if (position < inputs.size) inputs[position] else null)
+    }
+
+    fun setErrorsAt(position: Int, error: List<String?>) {
+        errors[position] = error
+        notifyItemChanged(position)
+    }
+
+    fun clearErrors() {
+        errors.clear()
+        notifyDataSetChanged()
     }
 
     fun setFields(data: List<List<String>>) {

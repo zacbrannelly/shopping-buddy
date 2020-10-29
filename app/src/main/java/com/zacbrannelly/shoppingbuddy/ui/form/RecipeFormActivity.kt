@@ -3,11 +3,8 @@ package com.zacbrannelly.shoppingbuddy.ui.form
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
@@ -20,10 +17,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.zacbrannelly.shoppingbuddy.R
 import com.zacbrannelly.shoppingbuddy.data.FullRecipe
-import com.zacbrannelly.shoppingbuddy.data.IngredientWithQty
-import com.zacbrannelly.shoppingbuddy.data.RecipeIngredient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -32,7 +28,9 @@ class RecipeFormActivity: AppCompatActivity() {
 
     private lateinit var viewModel: RecipeFormViewModel
     private lateinit var nameField: TextInputEditText
+    private lateinit var nameFieldLayout: TextInputLayout
     private lateinit var typeField: TextInputEditText
+    private lateinit var typeFieldLayout: TextInputLayout
     private lateinit var ingredientsList: RecyclerView
     private lateinit var ingredientsListAdapter: TextInputListAdapter
     private lateinit var stepsList: RecyclerView
@@ -48,7 +46,9 @@ class RecipeFormActivity: AppCompatActivity() {
 
         image = findViewById(R.id.app_bar_image)
         nameField = findViewById(R.id.recipe_name_field)
+        nameFieldLayout = findViewById(R.id.recipe_name_field_layout)
         typeField = findViewById(R.id.recipe_type_field)
+        typeFieldLayout = findViewById(R.id.recipe_type_field_layout)
 
         selectImageButton = findViewById(R.id.select_image_button)
         selectImageButton.setOnClickListener {
@@ -171,8 +171,74 @@ class RecipeFormActivity: AppCompatActivity() {
     }
 
     private fun validateFields(): Boolean {
-        // TODO: Perform form validation.
-        return true
+        // Reset all errors.
+        nameFieldLayout.error = null
+        nameFieldLayout.isErrorEnabled = false
+        typeFieldLayout.error = null
+        typeFieldLayout.isErrorEnabled = false
+        ingredientsListAdapter.clearErrors()
+
+        val requiredFieldMsg = resources.getString(R.string.required_field)
+
+        // Name is a required field.
+        if (nameField.text.isNullOrBlank()) {
+            nameFieldLayout.error = requiredFieldMsg
+            return false
+        }
+
+        // Type is a required field.
+        if (typeField.text.isNullOrBlank()) {
+            typeFieldLayout.error = requiredFieldMsg
+            return false
+        }
+
+        // Validate ingredient fields
+        return validateIngredientFields()
+    }
+
+    private fun validateIngredientFields(): Boolean {
+        val requiredFieldMsg = resources.getString(R.string.required_field)
+
+        // At least one ingredient is required.
+        if (ingredientsListAdapter.getFields().isEmpty()) {
+            // Show error on row in ingredients inputs list.
+            ingredientsListAdapter.setErrorsAt(0, listOf(
+                requiredFieldMsg,
+                requiredFieldMsg
+            ))
+            return false
+        }
+
+        // Format example: "23 cups".
+        var result = true
+        val unitRegex = Regex("^\\d+\\.?(\\d+)? [^ ]+$")
+
+        // Check each ingredient field is valid.
+        ingredientsListAdapter.getFields().forEachIndexed { i, values ->
+            var nameError: String? = null
+            var unitsError: String? = null
+
+            // If name field is blank
+            if (values[0].isBlank()) {
+                nameError = requiredFieldMsg
+            }
+
+            // If unit field is blank
+            if (values[1].isBlank()) {
+                unitsError = requiredFieldMsg
+            } else if (!unitRegex.matches(values[1])) {
+                // If unit field is the wrong format, show example in error field.
+                unitsError = resources.getString(R.string.invalid_units)
+            }
+
+            // If an error occurred, show it and signal failure.
+            if (nameError != null || unitsError != null) {
+                ingredientsListAdapter.setErrorsAt(i, listOf(nameError, unitsError))
+                result = false
+            }
+        }
+
+        return result
     }
 
     private fun onSave() {

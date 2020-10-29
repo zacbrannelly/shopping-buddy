@@ -35,4 +35,7 @@
     <string name="from_url">From URL</string>
 
     <string name="shopping_list_caption">Ingredients to buy this week…</string>
+
+    <string name="required_field">This field is required!</string>
+    <string name="invalid_units">e.g. 2 cups</string>
 </resources>
