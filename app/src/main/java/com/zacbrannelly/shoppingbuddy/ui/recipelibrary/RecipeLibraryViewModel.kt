@@ -2,7 +2,6 @@ package com.zacbrannelly.shoppingbuddy.ui.recipelibrary
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.viewModelScope
 import com.zacbrannelly.shoppingbuddy.data.AppDatabase
@@ -37,7 +36,7 @@ class RecipeLibraryViewModel(application: Application) : AndroidViewModel(applic
         } else {
             viewModelScope.launch(Dispatchers.Main) {
                 val task = async(Dispatchers.IO) {
-                    recipeRepository.searchRecipeWithIngredients(query)
+                    recipeRepository.findAllRecipeWithIngredients(query)
                 }
 
                 recipes.value = task.await()

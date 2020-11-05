@@ -49,26 +49,4 @@
             android:layout_gravity="center"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/from_link_button"
-        android:background="?android:attr/selectableItemBackground"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:src="@android:drawable/ic_menu_upload"/>
-
-        <TextView
-            style="@style/TextAppearance.MaterialComponents.Body1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/from_url"
-            android:layout_gravity="center"/>
-    </LinearLayout>
-
 </LinearLayout>

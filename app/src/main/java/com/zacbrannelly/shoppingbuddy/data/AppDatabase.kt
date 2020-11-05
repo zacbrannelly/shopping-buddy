@@ -31,8 +31,6 @@ abstract class AppDatabase: RoomDatabase() {
 
     abstract fun ingredientDao(): IngredientDao
 
-    abstract fun recipeIngredientDao(): RecipeIngredientDao
-
     abstract fun stepDao(): StepDao
 
     abstract fun plannerDao(): PlannerDao

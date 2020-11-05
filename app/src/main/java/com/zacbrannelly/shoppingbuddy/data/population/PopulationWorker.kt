@@ -47,7 +47,7 @@ class PopulationWorker(
                     })
 
                     // Insert the links b/w recipe and ingredients into the DB.
-                    database.recipeIngredientDao().insertAll(recipes.flatMap { recipe ->
+                    database.ingredientDao().insertAllJoins(recipes.flatMap { recipe ->
                         recipe.ingredients.map {
                             // Map recipe to ingredient and quantity.
                             return@map RecipeIngredient(

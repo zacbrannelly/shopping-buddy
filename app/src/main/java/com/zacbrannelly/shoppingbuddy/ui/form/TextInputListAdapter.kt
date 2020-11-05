@@ -19,12 +19,12 @@ class TextInputListAdapter(private val textInputLayout: Int, private val fields:
         private val inputFields: List<TextInputEditText> = fields.map { view.findViewById(it) as TextInputEditText }
         private var textWatchers = ArrayList<TextWatcher>()
 
-        private fun updateState(emptyCheck: Boolean) {
+        private fun updateState(checkForEmpty: Boolean) {
             val index = adapterPosition
             val hasValue = index < inputs.size
 
             // Check if each field is empty.
-            if (emptyCheck && inputFields.all { it.text.isNullOrBlank() }) {
+            if (checkForEmpty && inputFields.all { it.text.isNullOrBlank() }) {
                 // If all fields empty, then remove it from state.
                 if (hasValue) {
                     inputFields.forEach { it.clearFocus() }
@@ -36,7 +36,7 @@ class TextInputListAdapter(private val textInputLayout: Int, private val fields:
 
             // If it was a non-empty change there was no value for this field in state, create one.
             // If it was a non-empty change and there was a value, update the state.
-            if (!emptyCheck) {
+            if (!checkForEmpty) {
                 val newData = ArrayList<String>()
                 newData.addAll(inputFields.map { it.text.toString() })
 

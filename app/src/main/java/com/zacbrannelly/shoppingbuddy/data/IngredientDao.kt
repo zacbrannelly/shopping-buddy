@@ -6,9 +6,6 @@ import java.util.*
 
 @Dao
 interface IngredientDao {
-    @Query("SELECT * FROM ingredients")
-    fun getIngredients(): LiveData<List<Ingredient>>
-
     @Query("SELECT * FROM ingredients WHERE name=:name AND units=:units")
     suspend fun findByNameAndUnits(name: String, units: String): Ingredient?
 
@@ -23,7 +20,7 @@ interface IngredientDao {
 
     @Transaction
     suspend fun clearAndInsertAllJoins(recipeId: UUID, recipeIngredients: List<RecipeIngredient>) {
-            deleteAllJoins(recipeId)
-            insertAllJoins(recipeIngredients)
+        deleteAllJoins(recipeId)
+        insertAllJoins(recipeIngredients)
     }
 }

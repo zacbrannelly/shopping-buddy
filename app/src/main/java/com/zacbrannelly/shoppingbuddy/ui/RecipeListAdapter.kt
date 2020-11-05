@@ -69,11 +69,11 @@ class RecipeListAdapter(val context: Context): RecyclerView.Adapter<RecipeListAd
     var onItemRemoved: ((Recipe, String?, Int?) -> Unit)? = null
 
     // ItemTouchHelper listener that allows dragging items.
-    inner class ItemMoveListener(private val context: Context) : ItemTouchHelper.Callback() {
+    inner class ItemMoveListener(context: Context) : ItemTouchHelper.Callback() {
         private val background: ColorDrawable = ColorDrawable()
         private val deleteIcon = ContextCompat.getDrawable(context, R.drawable.ic_delete)
 
-        override fun getMovementFlags(
+            override fun getMovementFlags(
             recyclerView: RecyclerView,
             viewHolder: RecyclerView.ViewHolder
         ): Int {
@@ -186,7 +186,7 @@ class RecipeListAdapter(val context: Context): RecyclerView.Adapter<RecipeListAd
                 .build()
         }
 
-        private fun loadImageFromAssets(recipe: Recipe) = CoroutineScope(Dispatchers.Main).launch {
+        private fun loadImage(recipe: Recipe) = CoroutineScope(Dispatchers.Main).launch {
             // Load the image in an IO thread.
             val task = async(Dispatchers.IO) {
                 return@async recipe.loadBitmap(context)
@@ -210,7 +210,7 @@ class RecipeListAdapter(val context: Context): RecyclerView.Adapter<RecipeListAd
             caption.text = ingredients.joinToString()
 
             // Load the image of the recipe
-            loadImageFromAssets(recipe)
+            loadImage(recipe)
 
             if (item.viewType == RecipeListItem.VIEW_TYPE_ITEM)
                 view.setOnClickListener { onItemClicked?.invoke(recipe, image) }

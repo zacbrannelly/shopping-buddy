@@ -19,12 +19,8 @@ interface RecipeDao {
     fun findFullRecipe(id: UUID): LiveData<FullRecipe>
 
     @Transaction
-    @Query("SELECT * FROM recipes WHERE id = :id")
-    fun findRecipeWithIngredients(id: UUID): RecipeWithIngredients?
-
-    @Transaction
     @Query("SELECT * FROM recipes WHERE name LIKE '%' || :query || '%' ORDER BY name")
-    suspend fun searchAllRecipeWithIngredients(query: String): List<RecipeWithIngredients>
+    suspend fun findAllRecipeWithIngredients(query: String): List<RecipeWithIngredients>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(recipe: Recipe)

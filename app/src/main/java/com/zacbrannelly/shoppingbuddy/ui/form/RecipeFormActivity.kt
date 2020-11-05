@@ -54,8 +54,7 @@ class RecipeFormActivity: AppCompatActivity() {
         selectImageButton.setOnClickListener {
             ImageOptionsDialogFragment(
                 { takeImage() },
-                { selectImageFromGallery() },
-                { selectImageFromUrl() }
+                { selectImageFromGallery() }
             ).show(supportFragmentManager, "options")
         }
 
@@ -164,10 +163,6 @@ class RecipeFormActivity: AppCompatActivity() {
     private fun selectImageFromGallery() {
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply { type = "image/*" }
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), GALLERY_REQUEST)
-    }
-
-    private fun selectImageFromUrl() {
-        // TODO: Get URL from user and download image (this feature is a maybe).
     }
 
     private fun validateFields(): Boolean {
