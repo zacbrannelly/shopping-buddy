@@ -7,7 +7,7 @@
     },
     {
       "day": "TUESDAY",
-      "recipeId": "c9dc8d98-dee6-4239-a839-44a1c40ea055",
+      "recipeId": "138e83fc-6aed-4727-8736-a36da78d182c",
       "priority": 2
     },
     {
@@ -17,8 +17,13 @@
     },
     {
       "day": "WEDNESDAY",
-      "recipeId": "59919df4-f0de-4748-b36f-a7902e51332f",
+      "recipeId": "8b8f25dd-9f22-44bb-b17a-cb1041857036",
       "priority": 1
+    },
+    {
+      "day": "WEDNESDAY",
+      "recipeId": "59919df4-f0de-4748-b36f-a7902e51332f",
+      "priority": 2
     },
     {
       "day": "THURSDAY",
@@ -26,9 +31,19 @@
       "priority": 1
     },
     {
+      "day": "THURSDAY",
+      "recipeId": "138e83fc-6aed-4727-8736-a36da78d182c",
+      "priority": 2
+    },
+    {
       "day": "FRIDAY",
       "recipeId": "c9dc8d98-dee6-4239-a839-44a1c40ea055",
       "priority": 1
+    },
+    {
+      "day": "FRIDAY",
+      "recipeId": "8b8f25dd-9f22-44bb-b17a-cb1041857036",
+      "priority": 2
     },
     {
       "day": "SATURDAY",
@@ -133,6 +148,212 @@
           },
           "metadata": {
             "qty": 5
+          }
+        }
+      ]
+    },
+    {
+      "recipe": {
+        "id": "8b8f25dd-9f22-44bb-b17a-cb1041857036",
+        "name": "Buttermilk Pancakes",
+        "type": "Desert",
+        "image": "pancakes.jpg",
+        "isImageAsset": true
+      },
+      "steps": [
+        {
+          "step": 0,
+          "description": "Preheat oven to 200 degrees F and a nonstick griddle to 350 degrees F."
+        },
+        {
+          "step": 1,
+          "description": "In a large glass measuring cup or another bowl, whisk together buttermilk, butter, sour cream, and eggs. Pour mixture over dry ingredients and stir using a rubber spatula just until moist."
+        },
+        {
+          "step": 3,
+          "description": "Lightly coat a griddle or nonstick skillet with nonstick spray. Scoop 1/3 cup batter for each pancake and cook until bubbles appear on top and the underside is nicely browned, about 2 minutes. Flip and cook pancakes on the other side, about 1-2 minutes longer; keep warm in oven."
+        },
+        {
+          "step": 4,
+          "description": "Serve immediately."
+        }
+      ],
+      "ingredients": [
+        {
+          "ingredient": {
+            "id": "bd74e93f-6ccf-420d-8e80-0b09e355aed1",
+            "name": "Sour Cream",
+            "units": "Cups"
+          },
+          "metadata": {
+            "qty": 1
+          }
+        },
+        {
+          "ingredient": {
+            "id": "9ad1f4bf-81bb-4794-9ae2-5973dc494f7e",
+            "name": "Salt",
+            "units": "Tsps"
+          },
+          "metadata": {
+            "qty": 1
+          }
+        },
+        {
+          "ingredient": {
+            "id": "0d1e6e08-0699-417d-be42-106c728da4f5",
+            "name": "Buttermilk",
+            "units": "Cups"
+          },
+          "metadata": {
+            "qty": 2
+          }
+        },
+        {
+          "ingredient": {
+            "id": "8de46f18-1866-4c31-b11a-9e1532609a4a",
+            "name": "Baking Powder",
+            "units": "Tsps"
+          },
+          "metadata": {
+            "qty": 1
+          }
+        },
+        {
+          "ingredient": {
+            "id": "c739e4a4-5249-4c6e-a8e0-a88445ccc7cd",
+            "name": "Flour",
+            "units": "Cups"
+          },
+          "metadata": {
+            "qty": 2
+          }
+        },
+        {
+          "ingredient": {
+            "id": "b7968934-9bac-421a-8adf-ac639e18ea25",
+            "name": "Baking Soda",
+            "units": "Tsps"
+          },
+          "metadata": {
+            "qty": 1
+          }
+        },
+        {
+          "ingredient": {
+            "id": "6db150cc-bb22-4f12-bb04-c1c3dc295939",
+            "name": "Eggs",
+            "units": "Eggs"
+          },
+          "metadata": {
+            "qty": 2
+          }
+        },
+        {
+          "ingredient": {
+            "id": "6fd2a66a-1867-4632-9f8a-e3f59768a2a3",
+            "name": "Unsalted Butter",
+            "units": "Tbsps"
+          },
+          "metadata": {
+            "qty": 3
+          }
+        },
+        {
+          "ingredient": {
+            "id": "d3dd24f2-f04e-490a-b3c8-bba783e27df9",
+            "name": "Sugar",
+            "units": "Tbsps"
+          },
+          "metadata": {
+            "qty": 2
+          }
+        }
+      ]
+    },
+    {
+      "recipe": {
+        "id": "138e83fc-6aed-4727-8736-a36da78d182c",
+        "name": "Spaghetti Carbonara",
+        "type": "Italian",
+        "image": "spaghetti.jpg",
+        "isImageAsset": true
+      },
+      "steps": [
+        {
+          "step": 0,
+          "description": "In a large pot of boiling salted water, cook pasta according to package instructions; reserve 1/2 cup water and drain well."
+        },
+        {
+          "step": 1,
+          "description": "In a small bowl, whisk together eggs and Parmesan; set aside."
+        },
+        {
+          "step": 2,
+          "description": "Heat a large skillet over medium high heat. Add bacon and cook until brown and crispy, about 6-8 minutes; reserve excess fat."
+        },
+        {
+          "step": 3,
+          "description": "Stir in garlic until fragrant, about 1 minute. Reduce heat to low."
+        },
+        {
+          "step": 4,
+          "description": "Working quickly, stir in pasta and egg mixture, and gents toss to combine; season with salt and pepper, to taste. Add reserved pasta water, one tablespoon at a time, until desired consistency is reached."
+        },
+        {
+          "step": 5,
+          "description": "Serve immediately, garnished with parsley, if desired."
+        }
+      ],
+      "ingredients": [
+        {
+          "ingredient": {
+            "id": "411c532a-aa4f-4ec1-a000-89db6810567e",
+            "name": "Bacon",
+            "units": "Grams"
+          },
+          "metadata": {
+            "qty": 200
+          }
+        },
+        {
+          "ingredient": {
+            "id": "0e0b7abe-62e3-4dd2-86d7-512ad99063af",
+            "name": "Spaghetti",
+            "units": "Grams"
+          },
+          "metadata": {
+            "qty": 500
+          }
+        },
+        {
+          "ingredient": {
+            "id": "6db150cc-bb22-4f12-bb04-c1c3dc295939",
+            "name": "Eggs",
+            "units": "Eggs"
+          },
+          "metadata": {
+            "qty": 2
+          }
+        },
+        {
+          "ingredient": {
+            "id": "1ffc351f-d4ac-45a7-925d-c7a1f612055a",
+            "name": "Black Pepper",
+            "units": "Pinches"
+          },
+          "metadata": {
+            "qty": 2
+          }
+        },
+        {
+          "ingredient": {
+            "id": "8d3cdfae-c5f5-45cf-87ef-afc14247b21d",
+            "name": "Garlic",
+            "units": "Cloves"
+          },
+          "metadata": {
+            "qty": 2
           }
         }
       ]
